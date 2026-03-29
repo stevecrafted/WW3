@@ -14,7 +14,7 @@ use flight\net\Router;
 $router->group('', function(Router $router) use ($app) {
 
 	$router->get('/', function() use ($app) {
-		$app->render('welcome', [ 'message' => 'You are gonna do great things!' ]);
+		$app->render('welcome', [ 'message' => 'You are gonna do great things!' , 'csp_nonce' => $app->get('csp_nonce')]);
 	});
 
 	$router->get('/hello-world/@name', function($name) {

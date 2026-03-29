@@ -14,18 +14,25 @@ class SecurityHeadersMiddleware
 	{
 		$this->app = $app;
 	}
-	
+
 	public function before(array $params): void
 	{
 		$nonce = $this->app->get('csp_nonce');
+		$this->app->set('csp_nonce', $nonce);
 
-		// development mode to execute Tracy debug bar CSS
+		// Pour Tracy (debug bar)
 		$tracyCssBypass = "'nonce-{$nonce}'";
-		if(Debugger::$showBar === true) {
-			$tracyCssBypass = ' \'unsafe-inline\'';
+		if (Debugger::$showBar === true) {
+			$tracyCssBypass = "'unsafe-inline'";
 		}
 
-		$csp = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' 'strict-dynamic'; style-src 'self' {$tracyCssBypass}; img-src 'self' data:;";
+		$csp = "default-src 'self' https://cdn.tiny.cloud; " .
+			"script-src 'self' 'nonce-{$nonce}' https://sp.tinymce.com https://cdn.tiny.cloud; " .
+			"style-src 'self' {$tracyCssBypass} https://cdn.tiny.cloud; " .
+			"font-src 'self' https://cdn.tiny.cloud https://fonts.gstatic.com; " .
+			"connect-src 'self' https://cdn.tiny.cloud https://sp.tinymce.com https://api.uploadcare.com; " .
+			"img-src 'self' data: https://cdn.tiny.cloud https://ucarecdn.com;";
+
 		$this->app->response()->header('X-Frame-Options', 'SAMEORIGIN');
 		$this->app->response()->header("Content-Security-Policy", $csp);
 		$this->app->response()->header('X-XSS-Protection', '1; mode=block');
