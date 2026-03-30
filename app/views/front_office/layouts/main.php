@@ -52,15 +52,14 @@
 
         <nav class="nav-primary" role="navigation" aria-label="Navigation principale">
             <div class="nav-primary__inner">
-                <a href="/actualite"
-                    class="nav-primary__item <?= ($currentPage ?? '') === 'actualite' ? 'nav-primary__item--active' : '' ?>"
-                    aria-current="<?= ($currentPage ?? '') === 'actualite' ? 'page' : 'false' ?>">
-                    Actualité
-                </a>
-                <div class="nav-primary__divider" aria-hidden="true"></div>
-                <a href="/histoire"
-                    class="nav-primary__item <?= ($currentPage ?? '') === 'histoire' ? 'nav-primary__item--active' : '' ?>">Histoire</a>
-                <div class="nav-primary__divider" aria-hidden="true"></div>
+                <?php foreach ($sections as $section): ?>
+                    <a href="/<?= htmlspecialchars($section->slug) ?>"
+                        class="nav-primary__item <?= ($currentPage ?? '') === $section->slug ? 'nav-primary__item--active' : '' ?>"
+                        aria-current="<?= ($currentPage ?? '') === $section->slug ? 'page' : 'false' ?>">
+                        <?= htmlspecialchars($section->name) ?>
+                    </a>
+                    <div class="nav-primary__divider" aria-hidden="true"></div>
+                <?php endforeach; ?>
             </div>
         </nav>
 

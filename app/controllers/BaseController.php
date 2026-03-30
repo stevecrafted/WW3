@@ -1,15 +1,25 @@
 <?php
 
 namespace app\controllers;
+use app\models\Section;
 
 class BaseController
 {
+    protected $sections;
+
+    public function __construct()
+    {
+        $sectionModel = new Section();
+        $this->sections = $sectionModel->findAll();
+    }
+
     protected function render(string $viewPath, array $data = []): void
     {
         $baseViewPath = dirname(__DIR__) . '/views/front_office';
         $viewFile = $baseViewPath . '/pages/' . $viewPath . '.php';
         $layoutFile = $baseViewPath . '/layouts/main.php';
 
+        $data['sections'] = $this->sections;
         if (!is_file($viewFile) || !is_file($layoutFile)) {
             http_response_code(500);
             echo 'Template not found.';
@@ -20,7 +30,9 @@ class BaseController
 
         ob_start();
         require $viewFile;
+        include __DIR__ . "/../views/front_office/$view.php";
         $content = ob_get_clean();
+        include __DIR__ . "/../views/front_office/layouts/main.php";
 
         require $layoutFile;
     }
