@@ -32,9 +32,28 @@ class BaseController
         echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
+    public function showNotFound(): void
+    {
+        $this->notFound();
+    }
+
     protected function notFound(): void
     {
+        $accept = strtolower((string) ($_SERVER['HTTP_ACCEPT'] ?? ''));
+        $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+        $isApiRequest = strncmp($requestPath, '/api/', 5) === 0;
+
+        if ($isApiRequest || strpos($accept, 'application/json') !== false) {
+            $this->json(['error' => 'Resource not found'], 404);
+            return;
+        }
+
         http_response_code(404);
-        echo '404 - Page not found';
+        $this->render('NotFound', [
+            'title' => '404 - Page introuvable | IranWatch',
+            'metaDescription' => 'La page demandee est introuvable.',
+            'robots' => 'noindex, follow',
+            'currentPage' => '',
+        ]);
     }
 }

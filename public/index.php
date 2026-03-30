@@ -42,6 +42,7 @@ $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
+$baseController = new app\controllers\BaseController();
 
 if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
   $actualiteController->index();
@@ -78,5 +79,4 @@ if ($method === 'POST' && preg_match('#^/api/users/(\d+)$#', $path, $matches)) {
   exit;
 }
 
-http_response_code(404);
-echo '404 - Page not found';
+$baseController->showNotFound();
