@@ -8,6 +8,11 @@ use app\models\Section;
 
 class ActualiteController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(): void
     {
         $sectionModel = new Section();

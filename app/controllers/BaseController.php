@@ -19,21 +19,22 @@ class BaseController
         $viewFile = $baseViewPath . '/pages/' . $viewPath . '.php';
         $layoutFile = $baseViewPath . '/layouts/main.php';
 
-        $data['sections'] = $this->sections;
         if (!is_file($viewFile) || !is_file($layoutFile)) {
             http_response_code(500);
             echo 'Template not found.';
             return;
         }
 
+        // Fusion des données
+        $data['sections'] = $this->sections;
         extract($data, EXTR_SKIP);
 
+        // Capture du contenu de la vue
         ob_start();
         require $viewFile;
-        include __DIR__ . "/../views/front_office/$view.php";
         $content = ob_get_clean();
-        include __DIR__ . "/../views/front_office/layouts/main.php";
 
+        // Inclusion du layout (qui utilise $content)
         require $layoutFile;
     }
 

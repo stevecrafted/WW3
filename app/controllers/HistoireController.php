@@ -7,6 +7,11 @@ use app\models\Image;
 
 class HistoireController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         $sectionModel = new Section();

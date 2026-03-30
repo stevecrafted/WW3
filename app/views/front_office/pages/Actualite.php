@@ -5,7 +5,7 @@
  */
 
 $hero = $articles[0] ?? null; 
-$others =  $articles;
+$others = array_slice($articles, 1);
 ?>
 
 <!-- EN-TÊTE DE SECTION -->
