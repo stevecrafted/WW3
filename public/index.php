@@ -43,6 +43,7 @@ $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
 $baseController = new app\controllers\BaseController();
+$sectionAdminController = new app\controllers\SectionAdminController();
 
 if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
   $actualiteController->index();
@@ -76,6 +77,21 @@ if ($method === 'GET' && preg_match('#^/api/users/(\d+)$#', $path, $matches)) {
 
 if ($method === 'POST' && preg_match('#^/api/users/(\d+)$#', $path, $matches)) {
   $apiController->updateUser((int) $matches[1]);
+  exit;
+}
+
+if ($method === 'GET' && $path === '/admin/sections') {
+  $sectionAdminController->index();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/admin/sections/save') {
+  $sectionAdminController->save();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/admin/sections/delete') {
+  $sectionAdminController->delete();
   exit;
 }
 

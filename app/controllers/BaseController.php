@@ -6,7 +6,17 @@ class BaseController
 {
     protected function render(string $viewPath, array $data = []): void
     {
-        $baseViewPath = dirname(__DIR__) . '/views/front_office';
+        $this->renderTemplate('front_office', $viewPath, $data);
+    }
+
+    protected function renderBackOffice(string $viewPath, array $data = []): void
+    {
+        $this->renderTemplate('back_office', $viewPath, $data);
+    }
+
+    private function renderTemplate(string $scope, string $viewPath, array $data = []): void
+    {
+        $baseViewPath = dirname(__DIR__) . '/views/' . $scope;
         $viewFile = $baseViewPath . '/pages/' . $viewPath . '.php';
         $layoutFile = $baseViewPath . '/layouts/main.php';
 
