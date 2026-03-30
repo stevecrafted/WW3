@@ -5,3 +5,4 @@ composer.lock
 .runway-creds.json
 request
 *.cache
+public/uploads/contents
