@@ -279,7 +279,9 @@ $buildUrl = static function (array $params = []) use ($filters, $page): string {
                 <?php foreach ($sections as $section): ?>
                     <article class="bo-row">
                         <div>
-                            <div class="bo-row-head"><?= htmlspecialchars($section->name) ?></div>
+                            <div class="bo-row-head">
+                                <a href="<?= htmlspecialchars('/admin/sections/' . (int) $section->id . '/contents') ?>"><?= htmlspecialchars($section->name) ?></a>
+                            </div>
                             <div class="bo-row-sub">Titre: <?= htmlspecialchars($section->title) ?></div>
                             <div class="bo-row-sub">Slug: <?= htmlspecialchars($section->slug) ?></div>
                         </div>
@@ -289,6 +291,7 @@ $buildUrl = static function (array $params = []) use ($filters, $page): string {
                                 <input type="hidden" name="id" value="<?= (int) $section->id ?>" />
                                 <button type="submit" class="bo-btn-danger">Supprimer</button>
                             </form>
+                            <a href="<?= htmlspecialchars('/admin/sections/' . (int) $section->id . '/contents') ?>" aria-label="Voir les contenus de la section">&rarr;</a>
                         </div>
                     </article>
                 <?php endforeach; ?>

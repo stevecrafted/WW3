@@ -39,7 +39,6 @@ class Image
             $sql .= " LIMIT " . (int) $options['limit'];
         }
 
-        error_log($sql);
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();
@@ -51,5 +50,34 @@ class Image
     {
         $results = $this->findAll($conditions, ['limit' => 1]);
         return $results[0] ?? null;
+    }
+
+    public function createImage(int $contentId, array $payload): int
+    {
+        $sql = 'INSERT INTO image (content_id, url, alt_text, display_order)'
+            . ' VALUES (:content_id, :url, :alt_text, :display_order)';
+
+        $stmt = $this->db->prepare($sql);
+        $ok = $stmt->execute([
+            ':content_id' => $contentId,
+            ':url' => $payload['url'],
+            ':alt_text' => $payload['alt_text'] ?? null,
+            ':display_order' => (int) ($payload['display_order'] ?? 0),
+        ]);
+
+        if ($ok) {
+            return (int) $this->db->lastInsertId();
+        }
+
+        return 0;
+    }
+
+    public function softDeleteByContentId(int $contentId): bool
+    {
+        $sql = 'UPDATE image SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
+            . ' WHERE content_id = :content_id AND deleted_at IS NULL';
+
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([':content_id' => $contentId]);
     }
 }

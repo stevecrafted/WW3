@@ -1,0 +1,221 @@
+:root {
+    --bo-bg: #efecd9;
+    --bo-border: #2c2c2c;
+    --bo-text: #1f1f1f;
+    --bo-card: #f5f2e4;
+    --bo-muted: #535244;
+    --bo-btn: #f7f4e8;
+    --bo-btn-hover: #ece7d1;
+    --bo-danger: #8a2d2d;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background: radial-gradient(circle at 20% 0%, #f4f0de 0%, var(--bo-bg) 55%, #e3ddc6 100%);
+    color: var(--bo-text);
+}
+
+.bo-shell {
+    max-width: 1200px;
+    margin: 28px auto;
+    padding: 0 18px 24px;
+}
+
+.bo-title {
+    margin: 0 0 12px;
+    font-size: 28px;
+    letter-spacing: 0.4px;
+}
+
+.bo-notice {
+    background: #eaf7d6;
+    border: 2px solid #4f6e24;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.bo-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(320px, 0.95fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.bo-card {
+    background: var(--bo-card);
+    border: 2px solid var(--bo-border);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 6px 0 rgba(44, 44, 44, 0.12);
+}
+
+.bo-toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.bo-toolbar input {
+    flex: 1 1 180px;
+}
+
+.bo-field,
+.bo-toolbar input,
+.bo-toolbar button,
+.bo-toolbar a,
+.bo-row button,
+.bo-row a,
+.bo-form button,
+.bo-form a {
+    border: 2px solid var(--bo-border);
+    border-radius: 10px;
+    min-height: 40px;
+    padding: 8px 10px;
+    background: var(--bo-btn);
+    color: var(--bo-text);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.bo-form textarea,
+.bo-form input,
+.bo-form select {
+    width: 100%;
+}
+
+.bo-toolbar button,
+.bo-toolbar a,
+.bo-row button,
+.bo-row a,
+.bo-form button,
+.bo-form a {
+    cursor: pointer;
+    transition: transform .14s ease, background-color .14s ease;
+}
+
+.bo-toolbar button:hover,
+.bo-toolbar a:hover,
+.bo-row button:hover,
+.bo-row a:hover,
+.bo-form button:hover,
+.bo-form a:hover {
+    transform: translateY(-1px);
+    background: var(--bo-btn-hover);
+}
+
+.bo-section-list-title {
+    text-align: center;
+    font-weight: 700;
+    margin: 8px 0 12px;
+}
+
+.bo-list {
+    display: grid;
+    gap: 10px;
+}
+
+.bo-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: center;
+    border: 2px solid var(--bo-border);
+    border-radius: 12px;
+    padding: 10px;
+    background: #f9f7ed;
+}
+
+.bo-row-head {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.bo-row-sub {
+    color: var(--bo-muted);
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.bo-row-actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.bo-btn-danger {
+    border-color: var(--bo-danger) !important;
+    color: var(--bo-danger) !important;
+}
+
+.bo-pagination {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.bo-pagination a,
+.bo-pagination span {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bo-border);
+    border-radius: 9px;
+    text-decoration: none;
+    color: var(--bo-text);
+    background: var(--bo-btn);
+}
+
+.bo-pagination .is-current {
+    background: #dcd6bd;
+    font-weight: 700;
+}
+
+.bo-form {
+    display: grid;
+    gap: 12px;
+}
+
+.bo-form label {
+    display: grid;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.bo-form-head {
+    text-align: center;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+.bo-form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.bo-empty {
+    text-align: center;
+    color: var(--bo-muted);
+    border: 2px dashed var(--bo-border);
+    border-radius: 12px;
+    padding: 14px;
+}
+
+@media (max-width: 960px) {
+    .bo-grid {
+        grid-template-columns: 1fr;
+    }
+}

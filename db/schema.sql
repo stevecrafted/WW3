@@ -72,6 +72,9 @@ CREATE TABLE image (
 CREATE INDEX idx_section_name ON section(name);
 CREATE INDEX idx_section_title ON section(title);
 CREATE INDEX idx_section_deleted_updated ON section(deleted_at, updated_at);
+CREATE INDEX idx_content_section_deleted_updated ON content(section_id, deleted_at, updated_at);
+CREATE INDEX idx_content_title ON content(title);
+CREATE INDEX idx_image_content_deleted_order ON image(content_id, deleted_at, display_order);
 
 -- relation FK optimisee
 CREATE INDEX idx_content_section ON content(section_id);
