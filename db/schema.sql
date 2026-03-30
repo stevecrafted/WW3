@@ -24,11 +24,11 @@ CREATE TABLE content (
     section_id INT NOT NULL,
 
     title VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) NOT NULL UNIQUE,
     summary TEXT,
     content_text LONGTEXT,
 
-    meta_title VARCHAR(255),
+    meta_title VARCHAR(255),    -- 
+    slug VARCHAR(255) NOT NULL UNIQUE,
     meta_description TEXT,
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,

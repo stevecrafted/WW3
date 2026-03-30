@@ -12,10 +12,10 @@
     id (PK)
     id_section (FK)
     titre
-    slug              -- URL SEO
     resume            -- petit résumé (SEO + preview)
     contenu_text      -- HTML (TinyMCE)
-    meta_title        -- SEO
+    meta_ti tle        -- SEO
+    slug              -- URL SEO
     meta_description  -- SEO
     created_at
     updated_at
