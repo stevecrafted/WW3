@@ -2,7 +2,6 @@
 
 use flight\Engine;
 use flight\database\PdoWrapper;
-use flight\debug\database\PdoQueryCapture;
 use flight\debug\tracy\TracyExtensionLoader;
 use Tracy\Debugger;
 
@@ -77,18 +76,27 @@ if (Debugger::$showBar === true && php_sapi_name() !== 'cli') {
 /**********************************************
  *           Database Service Setup           *
  **********************************************/
-// Uncomment and configure the following for your database:
+if (!empty($config['database']['file_path'])) {
+	$dsn = 'sqlite:' . $config['database']['file_path'];
+	$username = null;
+	$password = null;
+} else {
+	$dsn = 'mysql:host=' . ($config['database']['host'] ?? 'localhost')
+		. ';dbname=' . ($config['database']['dbname'] ?? '')
+		. ';charset=utf8mb4';
+	$username = $config['database']['user'] ?? null;
+	$password = $config['database']['password'] ?? null;
+}
 
-// MySQL Example:
-// $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
-
-// SQLite Example:
-// $dsn = 'sqlite:' . $config['database']['file_path'];
-
-// Register Flight::db() service
-// In development, use PdoQueryCapture to log queries; in production, use PdoWrapper for performance.
-// $pdoClass = Debugger::$showBar === true ? PdoQueryCapture::class : PdoWrapper::class;
-// $app->register('db', $pdoClass, [ $dsn, $config['database']['user'] ?? null, $config['database']['password'] ?? null ]);
+$app->register('db', PdoWrapper::class, [
+	$dsn,
+	$username,
+	$password,
+	[
+		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+	],
+]);
 
 /**********************************************
  *         Third-Party Integrations           *

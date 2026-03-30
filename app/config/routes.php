@@ -11,20 +11,8 @@ use flight\net\Router;
  */
 
 // This wraps all routes in the group with the SecurityHeadersMiddleware
-$router->group('', function(Router $router) use ($app) {
+$router->group('', function (Router $router) use ($app) {
+ 
+	$router->get('/actualite', [\app\controllers\ActualiteController::class, 'index']);
 
-	$router->get('/', function() use ($app) {
-		$app->render('welcome', [ 'message' => 'You are gonna do great things!' , 'csp_nonce' => $app->get('csp_nonce')]);
-	});
-
-	$router->get('/hello-world/@name', function($name) {
-		echo '<h1>Hello world! Oh hey '.$name.'!</h1>';
-	});
-
-	$router->group('/api', function() use ($router) {
-		$router->get('/users', [ ApiExampleController::class, 'getUsers' ]);
-		$router->get('/users/@id:[0-9]', [ ApiExampleController::class, 'getUser' ]);
-		$router->post('/users/@id:[0-9]', [ ApiExampleController::class, 'updateUser' ]);
-	});
-	
-}, [ SecurityHeadersMiddleware::class ]);
+}, [SecurityHeadersMiddleware::class]);

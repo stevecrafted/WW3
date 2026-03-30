@@ -10,7 +10,7 @@
 
 - contenu : 
     id (PK)
-    id_section (FK)
+    section_id (FK)
     titre
     resume            -- petit résumé (SEO + preview)
     contenu_text      -- HTML (TinyMCE)

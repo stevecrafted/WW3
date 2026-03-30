@@ -120,7 +120,10 @@ Flight::group('/api', function() {
  */ 
 $dsn = 'mysql:host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'] . ';charset=utf8mb4';
 Flight::register('db', PdoWrapper::class, [ $dsn, $config['database']['user'], $config['database']['password'] ]);
-
+// Crée une méthode db() pour un accès simple
+Flight::map('db', function() {
+    return Flight::get('db');
+});
 // At this point, your app should have all the instructions it needs and it'll
 // "start" processing everything. This is where the magic happens.
 $app->start();

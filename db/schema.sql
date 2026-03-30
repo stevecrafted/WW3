@@ -1,6 +1,11 @@
+<<<<<<< Updated upstream
 DROP DATABASE if exists ww3;
 CREATE DATABASE ww3;
 USE ww3;
+=======
+CREATE database ww3;
+use ww3;
+>>>>>>> Stashed changes
 
 -- =========================
 -- TABLE: section

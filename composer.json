@@ -23,6 +23,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
+        "flightphp/active-record": "^0.7.0",
         "flightphp/core": "^3.0",
         "flightphp/runway": "^0.2 || ^1.1",
         "tracy/tracy": "^2.9"

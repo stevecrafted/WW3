@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO META TAGS -->
+  <title>IranWatch — Actualités & Histoire du conflit Iran · USA · Israël</title>
+  <meta name="description" content="Suivez en temps réel les actualités sur la guerre en Iran, ainsi que l'histoire des relations entre l'Iran, les États-Unis et Israël." />
+  <meta name="keywords" content="guerre Iran, actualité Iran, Iran USA, Iran Israël, conflit Moyen-Orient" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://iranwatch.example.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="IranWatch — Actualités & Histoire du conflit" />
+  <meta property="og:description" content="Suivez en temps réel les actualités sur la guerre en Iran et l'histoire des relations géopolitiques." />
+  <meta property="og:image" content="https://iranwatch.example.com/og-image.jpg" />
+  <meta property="og:url" content="https://iranwatch.example.com/" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  
+</head>
+
+<body>
+
+  <!-- ── TOP BAR ──────────────────────────────────────────────── -->
+  <div class="top-bar" role="banner">
+    <div class="top-bar__inner">
+      <time class="top-bar__date" id="js-date"></time>
+      <span class="top-bar__tagline">Conflit Iran · USA · Israël — suivi en continu</span>
+    </div>
+  </div>
+
+  <!-- ── MASTHEAD ─────────────────────────────────────────────── -->
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a href="/" class="masthead__logo" aria-label="IranWatch - Accueil">
+        <span class="masthead__logo-word">Iran<span>Watch</span></span>
+        <span class="masthead__logo-sub">Géopolitique &amp; Conflits — Moyen-Orient</span>
+      </a>
+      <div class="masthead__search" role="search" tabindex="0" aria-label="Rechercher">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Rechercher
+      </div>
+    </div>
+  </header>
+
+  <!-- ── NAVIGATION ───────────────────────────────────────────── -->
+  <nav class="nav-primary" role="navigation" aria-label="Navigation principale">
+    <div class="nav-primary__inner">
+      <a href="/actualite" class="nav-primary__item nav-primary__item--active" aria-current="page">
+        Actualité
+      </a>
+      <div class="nav-primary__divider" aria-hidden="true"></div>
+      <a href="/histoire" class="nav-primary__item">Histoire</a>
+      <div class="nav-primary__divider" aria-hidden="true"></div>
+      <a href="/analyses" class="nav-primary__item">Analyses</a>
+      <div class="nav-primary__divider" aria-hidden="true"></div>
+      <a href="/carte" class="nav-primary__item">Carte du conflit</a>
+    </div>
+  </nav>
+
+  <!-- ── BREAKING NEWS ────────────────────────────────────────── -->
+  <div class="breaking" role="alert" aria-live="polite">
+    <div class="breaking__inner">
+      <span class="breaking__label" aria-label="Alerte">En direct</span>
+      <span class="breaking__text">
+        Dernière heure : Frappes signalées près de Téhéran — bilan en cours d'établissement · Réunion d'urgence du Conseil de sécurité de l'ONU convoquée
+      </span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!-- PAGE PRINCIPALE : ACTUALITÉ                                -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <main class="page-wrapper" id="main-content">
+
+    <!-- EN-TÊTE DE SECTION -->
+    <div class="section-header">
+      <h1 class="section-header__title">Actualité</h1>
+      <div class="section-header__line" aria-hidden="true"></div>
+      <span class="section-header__date" id="js-date-long"></span>
+    </div>
+
+    <!-- ── À LA UNE ──────────────────────────────────────────── -->
+    <section aria-labelledby="une-title">
+      <h2 id="une-title" class="visually-hidden">À la une</h2>
+
+      <div class="une-grid">
+
+        <!-- ARTICLE HÉRO -->
+        <article class="article article-hero" itemscope itemtype="https://schema.org/NewsArticle">
+          <div class="img-placeholder" style="width:100%;aspect-ratio:16/9;">
+            <!-- <img src="/assets/img/une-principale.jpg" alt="Fumée s'élevant au-dessus de Téhéran après des frappes aériennes, mars 2026" class="article__img" itemprop="image"> -->
+            IMAGE PRINCIPALE
+          </div>
+          <span class="article__tag" itemprop="articleSection">Frappes aériennes</span>
+          <h2 class="article__title" itemprop="headline">
+            <a href="/actualite/frappes-teheran-mars-2026">
+              Nouvelles frappes sur la périphérie de Téhéran : l'Iran promet une riposte « sans précédent »
+            </a>
+          </h2>
+          <p class="article__chapo" itemprop="description">
+            Des explosions ont été entendues dans plusieurs quartiers de la capitale iranienne tôt ce dimanche matin.
+            Le gouvernement de Téhéran a convoqué l'ambassadeur de l'ONU et dénoncé une « agression flagrante ».
+          </p>
+          <div class="article__meta">
+            <time class="article__meta-time" datetime="2026-03-29T06:45:00+03:30" itemprop="datePublished">
+              Il y a 2 h
+            </time>
+            <span>Par la rédaction IranWatch</span>
+          </div>
+        </article>
+
+        <!-- ARTICLE SECONDAIRE -->
+        <article class="article article-secondary" itemscope itemtype="https://schema.org/NewsArticle">
+          <div class="img-placeholder" style="width:100%;aspect-ratio:4/3;">IMAGE</div>
+          <span class="article__tag">Diplomatie</span>
+          <h2 class="article__title" itemprop="headline">
+            <a href="/actualite/usa-sanctions-renforcees">
+              Washington annonce un nouveau train de sanctions contre le régime iranien
+            </a>
+          </h2>
+          <p class="article__chapo">Le département d'État cible 47 entités liées au programme nucléaire de Téhéran.</p>
+          <div class="article__meta">
+            <time class="article__meta-time" datetime="2026-03-29T04:00:00-05:00">Il y a 4 h</time>
+          </div>
+        </article>
+
+        <!-- ARTICLES DU BAS -->
+        <article class="article article-bottom-1" itemscope itemtype="https://schema.org/NewsArticle">
+          <span class="article__tag">Israël</span>
+          <h2 class="article__title" itemprop="headline">
+            <a href="/actualite/israel-tsahal-alerte">
+              Tsahal place ses forces en alerte maximale au nord du pays
+            </a>
+          </h2>
+          <div class="article__meta">
+            <time class="article__meta-time" datetime="2026-03-29T03:00:00+02:00">Il y a 5 h</time>
+          </div>
+        </article>
+
+        <article class="article article-bottom-2" itemscope itemtype="https://schema.org/NewsArticle">
+          <span class="article__tag">Humanitaire</span>
+          <h2 class="article__title" itemprop="headline">
+            <a href="/actualite/aide-humanitaire-onu">
+              L'ONU demande un couloir humanitaire pour les civils iraniens déplacés
+            </a>
+          </h2>
+          <div class="article__meta">
+            <time class="article__meta-time" datetime="2026-03-28T22:00:00Z">Hier, 22 h 00</time>
+          </div>
+        </article>
+
+        <article class="article article-bottom-3" itemscope itemtype="https://schema.org/NewsArticle">
+          <span class="article__tag">Économie</span>
+          <h2 class="article__title" itemprop="headline">
+            <a href="/actualite/petrole-brut-cours">
+              Le baril de Brent franchit les 130 $ sur fond de tensions persistantes
+            </a>
+          </h2>
+          <div class="article__meta">
+            <time class="article__meta-time" datetime="2026-03-28T18:00:00Z">Hier, 18 h 00</time>
+          </div>
+        </article>
+
+      </div><!-- /.une-grid -->
+    </section>
+
+    <!-- ── CONTENU PRINCIPAL + SIDEBAR ──────────────────────── -->
+    <div class="content-with-sidebar">
+
+      <!-- FLUX D'ACTUALITÉS (scroll vertical) -->
+      <section aria-labelledby="flux-title">
+        <h2 class="subsection-title" id="flux-title">Toutes les actualités</h2>
+
+        <div class="articles-list" role="feed" aria-busy="false">
+
+          <!-- Article inline 1 -->
+          <article class="article article--inline" itemscope itemtype="https://schema.org/NewsArticle">
+            <div class="img-placeholder article__img">IMG</div>
+            <div class="article__body">
+              <span class="article__tag" itemprop="articleSection">Iran</span>
+              <h3 class="article__title" itemprop="headline">
+                <a href="/actualite/parlement-iranien-session-urgence">
+                  Le parlement iranien se réunit en session d'urgence pour voter des crédits de guerre supplémentaires
+                </a>
+              </h3>
+              <p class="article__chapo" itemprop="description">
+                Le Majlis a approuvé à une large majorité un budget exceptionnel destiné à renforcer les capacités défensives du pays face à la pression extérieure.
+              </p>
+              <div class="article__meta">
+                <time class="article__meta-time" datetime="2026-03-29T07:30:00+03:30">Il y a 1 h</time>
+                <span>Téhéran, envoyé spécial</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Article inline 2 -->
+          <article class="article article--inline" itemscope itemtype="https://schema.org/NewsArticle">
+            <div class="img-placeholder article__img">IMG</div>
+            <div class="article__body">
+              <span class="article__tag">Militaire</span>
+              <h3 class="article__title" itemprop="headline">
+                <a href="/actualite/drones-iraniens-golf-persique">
+                  Des drones iraniens interceptés au-dessus du Golfe Persique par la marine américaine
+                </a>
+              </h3>
+              <p class="article__chapo">
+                Le Pentagone confirme l'interception de dix drones de combat dans l'espace aérien international, sans faire état de victimes américaines.
+              </p>
+              <div class="article__meta">
+                <time class="article__meta-time" datetime="2026-03-29T05:00:00Z">Il y a 3 h</time>
+                <span>Washington</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Article inline 3 -->
+          <article class="article article--inline" itemscope itemtype="https://schema.org/NewsArticle">
+            <div class="img-placeholder article__img">IMG</div>
+            <div class="article__body">
+              <span class="article__tag">Russie</span>
+              <h3 class="article__title" itemprop="headline">
+                <a href="/actualite/moscou-mediation-iran">
+                  Moscou propose une médiation entre Téhéran et Washington, Washington décline
+                </a>
+              </h3>
+              <p class="article__chapo">
+                Le Kremlin a offert ses bons offices pour organiser des pourparlers indirects. La Maison Blanche a rejeté l'offre, jugeant la Russie « non neutre ».
+              </p>
+              <div class="article__meta">
+                <time class="article__meta-time" datetime="2026-03-29T02:00:00Z">Il y a 6 h</time>
+                <span>Moscou</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Article inline 4 -->
+          <article class="article article--inline" itemscope itemtype="https://schema.org/NewsArticle">
+            <div class="img-placeholder article__img">IMG</div>
+            <div class="article__body">
+              <span class="article__tag">Nucléaire</span>
+              <h3 class="article__title" itemprop="headline">
+                <a href="/actualite/aiea-rapport-enrichissement">
+                  L'AIEA publie un rapport alarmant sur l'enrichissement d'uranium iranien
+                </a>
+              </h3>
+              <p class="article__chapo">
+                L'Agence internationale de l'énergie atomique estime que l'Iran a enrichi suffisamment d'uranium pour produire plusieurs bombes atomiques si elle le décidait.
+              </p>
+              <div class="article__meta">
+                <time class="article__meta-time" datetime="2026-03-28T16:00:00Z">Hier, 16 h 00</time>
+                <span>Vienne</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Article inline 5 — contenu dynamique PHP (exemple commenté) -->
+          <!--
+          <?php foreach ($contenus as $c): ?>
+          <article class="article article--inline" itemscope itemtype="https://schema.org/NewsArticle">
+            <div class="img-placeholder article__img">IMG</div>
+            <div class="article__body">
+              <span class="article__tag"><?= htmlspecialchars($c->tag) ?></span>
+              <h3 class="article__title" itemprop="headline">
+                <a href="/actualite/<?= $c->slug ?>"><?= htmlspecialchars($c->titre) ?></a>
+              </h3>
+              <div class="article__chapo" itemprop="description"><?= $c->contenu /* HTML TinyMCE */ ?></div>
+              <div class="article__meta">
+                <time class="article__meta-time" datetime="<?= $c->date_creation ?>"><?= $c->date_formatee ?></time>
+              </div>
+            </div>
+          </article>
+          <?php endforeach; ?>
+          -->
+
+        </div><!-- /.articles-list -->
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" aria-label="Informations complémentaires">
+
+        <div class="sidebar__widget">
+          <p class="sidebar__widget-title">En bref</p>
+          <div class="sidebar__item">
+            <div>Khamenei s'exprime à la télévision nationale</div>
+            <div class="sidebar__item-date">Il y a 30 min</div>
+          </div>
+          <div class="sidebar__item">
+            <div>Le Liban ferme son espace aérien</div>
+            <div class="sidebar__item-date">Il y a 1 h</div>
+          </div>
+          <div class="sidebar__item">
+            <div>Prix du pétrole : +8 % ce matin</div>
+            <div class="sidebar__item-date">Il y a 2 h</div>
+          </div>
+          <div class="sidebar__item">
+            <div>Évacuation de ressortissants européens d'Iran en cours</div>
+            <div class="sidebar__item-date">Il y a 3 h</div>
+          </div>
+        </div>
+
+        <div class="sidebar__widget">
+          <p class="sidebar__widget-title">À lire aussi</p>
+          <div class="sidebar__item">
+            <a href="/histoire/iran-usa-1979">L'Iran et les États-Unis : 47 ans de rupture</a>
+          </div>
+          <div class="sidebar__item">
+            <a href="/histoire/accord-nucleaire-jcpoa">Le JCPOA, histoire d'un accord mort-né</a>
+          </div>
+          <div class="sidebar__item">
+            <a href="/histoire/israel-iran-proxy">Israël - Iran : la guerre de l'ombre</a>
+          </div>
+        </div>
+
+      </aside>
+    </div><!-- /.content-with-sidebar -->
+
+  </main>
+
+  <!-- ── FOOTER ────────────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div>
+          <div class="footer__logo">Iran<span>Watch</span></div>
+          <p class="footer__desc">
+            Veille géopolitique indépendante sur le conflit iranien.<br>
+            Information continue, vérifiée, sans publicité.
+          </p>
+          <!-- Données structurées JSON-LD (SEO) -->
+        </div>
+        <div>
+          <p class="footer__col-title">Rubriques</p>
+          <a class="footer__link" href="/actualite">Actualité</a>
+          <a class="footer__link" href="/histoire">Histoire</a>
+          <a class="footer__link" href="/analyses">Analyses</a>
+          <a class="footer__link" href="/carte">Carte</a>
+        </div>
+        <div>
+          <p class="footer__col-title">Légal</p>
+          <a class="footer__link" href="/mentions-legales">Mentions légales</a>
+          <a class="footer__link" href="/politique-confidentialite">Vie privée</a>
+          <a class="footer__link" href="/contact">Contact</a>
+        </div>
+        <div>
+          <p class="footer__col-title">Suivre</p>
+          <a class="footer__link" href="/rss.xml" rel="alternate" type="application/rss+xml">Flux RSS</a>
+          <a class="footer__link" href="https://twitter.com/iranwatch" rel="noopener">Twitter / X</a>
+          <a class="footer__link" href="https://t.me/iranwatch" rel="noopener">Telegram</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 IranWatch — Tous droits réservés</span>
+        <span class="footer__seo-note">
+          Ce site est indépendant et à vocation pédagogique. Les contenus visent à informer sur le conflit en Iran dans le cadre d'un projet académique sur le SEO.
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── DONNÉES STRUCTURÉES JSON-LD (SEO Schema.org) ─────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "IranWatch",
+    "url": "https://iranwatch.example.com",
+    "description": "Veille géopolitique sur la guerre en Iran, les relations Iran-USA-Israël.",
+    "inLanguage": "fr",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://iranwatch.example.com/logo.png"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://iranwatch.example.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Actualité", "item": "https://iranwatch.example.com/actualite" }
+    ]
+  }
+  </script>
+
+  <!-- ── JS UTILITAIRES ────────────────────────────────────────── -->
+  <script>
+    // Date dans la top bar
+    const opts  = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    const today = new Date().toLocaleDateString('fr-FR', opts);
+    const el    = document.getElementById('js-date');
+    const el2   = document.getElementById('js-date-long');
+    if (el)  el.textContent  = today.charAt(0).toUpperCase() + today.slice(1);
+    if (el2) el2.textContent = today.charAt(0).toUpperCase() + today.slice(1);
+  </script>
+
+</body>
+</html>
