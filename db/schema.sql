@@ -1,6 +1,6 @@
-DROP DATABASE if exists ww3;
-CREATE DATABASE ww3;
-USE ww3; 
+-- DROP DATABASE if exists ww3;
+-- CREATE DATABASE ww3;
+-- USE ww3; 
 
 -- =========================
 -- TABLE: section
@@ -61,6 +61,17 @@ CREATE TABLE image (
         REFERENCES content(id)
         ON DELETE CASCADE
 );
+
+-- =========================
+-- DONNEES MINIMALES
+-- =========================
+INSERT INTO section (name, slug, title)
+VALUES ('Actualite', 'actualite', 'Actualite Guerre en Iran')
+ON DUPLICATE KEY UPDATE title = VALUES(title);
+
+INSERT INTO section (name, slug, title)
+VALUES ('Histoire', 'histoire', 'Histoire du conflit')
+ON DUPLICATE KEY UPDATE title = VALUES(title);
 
 -- -- =========================
 -- -- INDEX (IMPORTANT pour perf SEO)

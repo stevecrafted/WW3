@@ -33,3 +33,8 @@ Puis ouvrir http://localhost:8000
 Configurer les acces dans [app/config/config.php](app/config/config.php).
 
 Le schema SQL est disponible dans [db/schema.sql](db/schema.sql).
+
+## Docker
+```bash
+docker-compose up -d --build
+```

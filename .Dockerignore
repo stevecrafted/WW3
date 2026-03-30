@@ -1,0 +1,10 @@
+app/cache/
+app/log/
+vendor/
+.git/
+.gitignore
+README.md
+docker-compose.yml
+.Dockerfile
+.dockerignore
+db_dumps/
