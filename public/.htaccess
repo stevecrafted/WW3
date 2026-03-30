@@ -1,4 +1,9 @@
 RewriteEngine On
+
+# Canonicalise /index.php/... vers /... (SEO)
+RewriteCond %{THE_REQUEST} \s/+index\.php(?:[/?\s]|$) [NC]
+RewriteRule ^index\.php/?(.*)$ /$1 [R=301,L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]

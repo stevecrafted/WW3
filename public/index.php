@@ -39,6 +39,20 @@ $path = rtrim($path, '/');
 $path = $path === '' ? '/' : $path;
 $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
+if ($method === 'GET' && isset($_GET['id']) && ctype_digit((string) $_GET['id']) && ($path === '/actualite' || $path === '/histoire')) {
+  $contenuModel = new app\models\Contenu();
+  $sectionModel = new app\models\Section();
+  $article = $contenuModel->findOne(['id' => (int) $_GET['id'], 'deleted_at' => null]);
+
+  if ($article) {
+    $articleSection = $sectionModel->findOne(['id' => $article->section_id, 'deleted_at' => null]);
+    if ($articleSection && in_array($articleSection->slug, ['actualite', 'histoire'], true)) {
+      header('Location: /' . $articleSection->slug . '/' . $article->id . '-' . $article->slug, true, 301);
+      exit;
+    }
+  }
+}
+
 $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
@@ -49,8 +63,8 @@ if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
   exit;
 }
 
-if ($method === 'GET' && preg_match('#^/actualite/([^/]+)$#', $path, $matches)) {
-  $actualiteController->show($matches[1]);
+if ($method === 'GET' && preg_match('#^/actualite/(\d+)(?:-([^/]+))?$#', $path, $matches)) {
+  $actualiteController->show((int) $matches[1], $matches[2] ?? null);
   exit;
 }
 
@@ -59,8 +73,8 @@ if ($method === 'GET' && $path === '/histoire') {
   exit;
 }
 
-if ($method === 'GET' && preg_match('#^/histoire/([^/]+)$#', $path, $matches)) {
-  $histoireController->show($matches[1]);
+if ($method === 'GET' && preg_match('#^/histoire/(\d+)(?:-([^/]+))?$#', $path, $matches)) {
+  $histoireController->show((int) $matches[1], $matches[2] ?? null);
   exit;
 }
 

@@ -25,7 +25,7 @@ class ActualiteController extends BaseController
 
         $contenuModel = new Contenu();
         $articles = $contenuModel->findAll(
-            ['section_id' => $section->id, 'deleted_at' => null],
+            ['section_id' => $section->id],
             ['order' => 'created_at DESC']
         );
 
@@ -47,14 +47,28 @@ class ActualiteController extends BaseController
         ]);
     }
 
-    public function show(string $slug): void
+    public function show(int $id, ?string $slug = null): void
     {
+
+        error_log("article");
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
+        $article = $contenuModel->findOne(['id' => $id]);
 
         if (!$article) {
             $this->notFound();
             return;
+        }
+
+        $sectionModel = new Section();
+        $section = $sectionModel->findOne(['id' => $article->section_id]);
+        if (!$section || $section->slug !== 'actualite') {
+            $this->notFound();
+            return;
+        }
+
+        if ($slug === null || $slug !== $article->slug) {
+            header('Location: /actualite/' . $article->id . '-' . $article->slug, true, 301);
+            exit;
         }
 
         $imageModel = new Image();
@@ -64,7 +78,6 @@ class ActualiteController extends BaseController
         );
         $article->image_principale = $article->images[0] ?? null;
 
-        $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
         $this->render('Article', [

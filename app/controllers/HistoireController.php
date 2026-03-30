@@ -25,7 +25,7 @@ class HistoireController extends BaseController
 
         $contenuModel = new Contenu();
         $articles = $contenuModel->findAll(
-            ['section_id' => $section->id, 'deleted_at' => null],
+            ['section_id' => $section->id],
             ['order' => 'created_at DESC']   // On peut trier par date, ou par ordre personnalisé si besoin
         );
 
@@ -51,14 +51,26 @@ class HistoireController extends BaseController
         $this->render('Histoire', $data);
     }
 
-    public function show($slug)
+    public function show(int $id, ?string $slug = null)
     {
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
+        $article = $contenuModel->findOne(['id' => $id]);
 
         if (!$article) {
             $this->notFound();
             return;
+        }
+
+        $sectionModel = new Section();
+        $section = $sectionModel->findOne(['id' => $article->section_id]);
+        if (!$section || $section->slug !== 'histoire') {
+            $this->notFound();
+            return;
+        }
+
+        if ($slug === null || $slug !== $article->slug) {
+            header('Location: /histoire/' . $article->id . '-' . $article->slug, true, 301);
+            exit;
         }
 
         // Charger les images
@@ -70,7 +82,6 @@ class HistoireController extends BaseController
         $article->image_principale = $article->images[0] ?? null;
 
         // Charger la section
-        $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
         $data = [

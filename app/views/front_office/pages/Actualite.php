@@ -34,7 +34,7 @@ $others = array_slice($articles, 1);
 
             <span class="article__tag" itemprop="articleSection">Actualité</span>
             <h2 class="article__title" itemprop="headline">
-                <a href="/actualite/<?= htmlspecialchars($hero->slug) ?>"><?= htmlspecialchars($hero->title) ?></a>
+                <a href="/actualite/<?= (int) $hero->id ?>-<?= htmlspecialchars($hero->slug) ?>"><?= htmlspecialchars($hero->title) ?></a>
             </h2>
             <p class="article__chapo" itemprop="description">
                 <?= htmlspecialchars($hero->summary ?? substr(strip_tags($hero->content_text), 0, 200)) ?>
@@ -73,7 +73,7 @@ $others = array_slice($articles, 1);
                 <div class="article__body">
                     <span class="article__tag">Actualité</span>
                     <h3 class="article__title" itemprop="headline">
-                        <a href="/actualite/<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
+                        <a href="/actualite/<?= (int) $article->id ?>-<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
                     </h3>
                     <p class="article__chapo" itemprop="description">
                         <?= htmlspecialchars($article->summary ?? substr(strip_tags($article->content_text), 0, 150)) ?>
