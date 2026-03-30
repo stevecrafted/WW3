@@ -1,0 +1,40 @@
+- section :
+    id (PK)
+    nom
+    slug        -- pour URL (ex: guerre-iran)
+    titre       -- titre affiché
+    created_at
+    updated_at
+    deleted_at
+
+
+- contenu : 
+    id (PK)
+    id_section (FK)
+    titre
+    slug              -- URL SEO
+    resume            -- petit résumé (SEO + preview)
+    contenu_text      -- HTML (TinyMCE)
+    meta_title        -- SEO
+    meta_description  -- SEO
+    created_at
+    updated_at
+    deleted_at
+
+
+image : 
+    id (PK)
+    id_contenu (FK)
+    url
+    alt_text
+    ordre
+    created_at
+    updated_at
+    deleted_at
+
+
+donne le script de creation de table mysql
+PK -> autoincrement
+
+champ et nom de table en anglais
+
