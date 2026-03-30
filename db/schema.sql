@@ -1,3 +1,6 @@
+DROP DATABASE if exists ww3;
+USE ww3;
+
 -- =========================
 -- TABLE: section
 -- =========================
