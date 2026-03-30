@@ -1,4 +1,5 @@
 DROP DATABASE if exists ww3;
+CREATE DATABASE ww3;
 USE ww3;
 
 -- =========================
