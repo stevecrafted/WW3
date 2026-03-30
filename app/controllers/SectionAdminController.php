@@ -9,6 +9,7 @@ use app\models\Section;
 class SectionAdminController extends BaseController
 {
     private const PER_PAGE = 5;
+    private const PAGE_WINDOW = 2;
 
     private Section $sectionModel;
 
@@ -44,6 +45,7 @@ class SectionAdminController extends BaseController
             'filters' => $filters,
             'page' => $page,
             'totalPages' => $totalPages,
+            'visiblePages' => $this->buildVisiblePages($page, $totalPages),
             'total' => (int) $result['total'],
             'editSection' => $editSection,
             'notice' => $notice,
@@ -140,5 +142,30 @@ class SectionAdminController extends BaseController
 
         header('Location: ' . $url);
         exit;
+    }
+
+    private function buildVisiblePages(int $currentPage, int $totalPages): array
+    {
+        if ($totalPages <= 1) {
+            return [1];
+        }
+
+        $start = max(1, $currentPage - self::PAGE_WINDOW);
+        $end = min($totalPages, $currentPage + self::PAGE_WINDOW);
+
+        $pages = [];
+        for ($i = $start; $i <= $end; $i++) {
+            $pages[] = $i;
+        }
+
+        if (!in_array(1, $pages, true)) {
+            array_unshift($pages, 1);
+        }
+
+        if (!in_array($totalPages, $pages, true)) {
+            $pages[] = $totalPages;
+        }
+
+        return array_values(array_unique($pages));
     }
 }

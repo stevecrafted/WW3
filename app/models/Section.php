@@ -247,25 +247,25 @@ class Section
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ($keyword !== '') {
             $params[':keyword'] = '%' . $this->escapeLike($keyword) . '%';
-            $clauses[] = '(name LIKE :keyword ESCAPE "\\" OR title LIKE :keyword ESCAPE "\\" OR slug LIKE :keyword ESCAPE "\\")';
+            $clauses[] = '(name LIKE :keyword OR title LIKE :keyword OR slug LIKE :keyword)';
         }
 
         $name = trim((string) ($filters['name'] ?? ''));
         if ($name !== '') {
             $params[':name'] = '%' . $this->escapeLike($name) . '%';
-            $clauses[] = 'name LIKE :name ESCAPE "\\"';
+            $clauses[] = 'name LIKE :name';
         }
 
         $title = trim((string) ($filters['title'] ?? ''));
         if ($title !== '') {
             $params[':title'] = '%' . $this->escapeLike($title) . '%';
-            $clauses[] = 'title LIKE :title ESCAPE "\\"';
+            $clauses[] = 'title LIKE :title';
         }
 
         $slug = trim((string) ($filters['slug'] ?? ''));
         if ($slug !== '') {
             $params[':slug'] = '%' . $this->escapeLike($slug) . '%';
-            $clauses[] = 'slug LIKE :slug ESCAPE "\\"';
+            $clauses[] = 'slug LIKE :slug';
         }
 
         return implode(' AND ', $clauses);

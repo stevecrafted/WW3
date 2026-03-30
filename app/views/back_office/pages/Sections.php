@@ -4,6 +4,7 @@ $filters = $filters ?? ['keyword' => '', 'name' => '', 'title' => '', 'slug' => 
 $sections = $sections ?? [];
 $page = $page ?? 1;
 $totalPages = $totalPages ?? 1;
+$visiblePages = $visiblePages ?? [1];
 $total = $total ?? 0;
 $editSection = $editSection ?? null;
 $notice = $notice ?? '';
@@ -295,13 +296,21 @@ $buildUrl = static function (array $params = []) use ($filters, $page): string {
 
             <?php if ($totalPages > 1): ?>
                 <nav class="bo-pagination" aria-label="Pagination">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                        <?php if ($i === (int) $page): ?>
-                            <span class="is-current"><?= $i ?></span>
+                    <?php if ($page > 1): ?>
+                        <a href="<?= htmlspecialchars($buildUrl(['page' => $page - 1])) ?>" aria-label="Page precedente">&lt;</a>
+                    <?php endif; ?>
+
+                    <?php foreach ($visiblePages as $p): ?>
+                        <?php if ((int) $p === (int) $page): ?>
+                            <span class="is-current"><?= (int) $p ?></span>
                         <?php else: ?>
-                            <a href="<?= htmlspecialchars($buildUrl(['page' => $i])) ?>"><?= $i ?></a>
+                            <a href="<?= htmlspecialchars($buildUrl(['page' => (int) $p])) ?>"><?= (int) $p ?></a>
                         <?php endif; ?>
-                    <?php endfor; ?>
+                    <?php endforeach; ?>
+
+                    <?php if ($page < $totalPages): ?>
+                        <a href="<?= htmlspecialchars($buildUrl(['page' => $page + 1])) ?>" aria-label="Page suivante">&gt;</a>
+                    <?php endif; ?>
                 </nav>
             <?php endif; ?>
         </section>
