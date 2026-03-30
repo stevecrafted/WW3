@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /back_office/
+Disallow: /log/
+Disallow: /cache/
+Sitemap: https://localhost/sitemap.xml

@@ -1,19 +1,19 @@
 <?php
-
 namespace app\controllers;
 
+use app\models\Section;
 use app\models\Contenu;
 use app\models\Image;
-use app\models\Section;
 
-class ActualiteController extends BaseController
+class HistoireController extends BaseController
 {
-    public function index(): void
+    public function index()
     {
         $sectionModel = new Section();
-        $section = $sectionModel->findOne(['slug' => 'actualite']);
+        $section = $sectionModel->findOne(['slug' => 'histoire']);
 
         if (!$section) {
+            error_log("Section 'histoire' introuvable");
             $this->notFound();
             return;
         }
@@ -21,9 +21,10 @@ class ActualiteController extends BaseController
         $contenuModel = new Contenu();
         $articles = $contenuModel->findAll(
             ['section_id' => $section->id, 'deleted_at' => null],
-            ['order' => 'created_at DESC']
+            ['order' => 'created_at DESC']   // On peut trier par date, ou par ordre personnalisé si besoin
         );
 
+        // Récupération des images
         $imageModel = new Image();
         foreach ($articles as $article) {
             $article->images = $imageModel->findAll(
@@ -33,16 +34,19 @@ class ActualiteController extends BaseController
             $article->image_principale = $article->images[0] ?? null;
         }
 
-        $this->render('Actualite', [
-            'title' => $section->meta_title ?? $section->title . ' - IranWatch',
-            'metaDescription' => $section->meta_description ?? 'Suivez l actualite du conflit Iran-USA-Israel',
-            'currentPage' => 'actualite',
-            'articles' => $articles,
-            'section' => $section,
-        ]);
+        // Préparation des données pour la vue
+        $data = [
+            'title'           => $section->meta_title ?? $section->title . ' — IranWatch',
+            'metaDescription' => $section->meta_description ?? 'Retour sur l\'histoire des tensions entre l\'Iran, les États-Unis et Israël.',
+            'currentPage'     => 'histoire',
+            'articles'        => $articles,
+            'section'         => $section,
+        ];
+
+        $this->render('Histoire', $data);
     }
 
-    public function show(string $slug): void
+    public function show($slug)
     {
         $contenuModel = new Contenu();
         $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
@@ -52,6 +56,7 @@ class ActualiteController extends BaseController
             return;
         }
 
+        // Charger les images
         $imageModel = new Image();
         $article->images = $imageModel->findAll(
             ['content_id' => $article->id],
@@ -59,14 +64,17 @@ class ActualiteController extends BaseController
         );
         $article->image_principale = $article->images[0] ?? null;
 
+        // Charger la section
         $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
-        $this->render('Article', [
-            'title' => $article->meta_title ?? $article->title . ' - IranWatch',
-            'metaDescription' => $article->meta_description ?? strip_tags($article->summary ?? ''),
-            'currentPage' => 'actualite',
-            'article' => $article,
-        ]);
+        $data = [
+            'title'           => $article->meta_title ?? $article->title . ' — IranWatch',
+            'metaDescription' => $article->meta_description ?? strip_tags($article->summary),
+            'currentPage'     => 'histoire',
+            'article'         => $article,
+        ];
+
+        $this->render('Article', $data);
     }
 }

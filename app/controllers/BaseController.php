@@ -1,0 +1,59 @@
+<?php
+
+namespace app\controllers;
+
+class BaseController
+{
+    protected function render(string $viewPath, array $data = []): void
+    {
+        $baseViewPath = dirname(__DIR__) . '/views/front_office';
+        $viewFile = $baseViewPath . '/pages/' . $viewPath . '.php';
+        $layoutFile = $baseViewPath . '/layouts/main.php';
+
+        if (!is_file($viewFile) || !is_file($layoutFile)) {
+            http_response_code(500);
+            echo 'Template not found.';
+            return;
+        }
+
+        extract($data, EXTR_SKIP);
+
+        ob_start();
+        require $viewFile;
+        $content = ob_get_clean();
+
+        require $layoutFile;
+    }
+
+    protected function json($payload, int $status = 200): void
+    {
+        http_response_code($status);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    }
+
+    public function showNotFound(): void
+    {
+        $this->notFound();
+    }
+
+    protected function notFound(): void
+    {
+        $accept = strtolower((string) ($_SERVER['HTTP_ACCEPT'] ?? ''));
+        $requestPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+        $isApiRequest = strncmp($requestPath, '/api/', 5) === 0;
+
+        if ($isApiRequest || strpos($accept, 'application/json') !== false) {
+            $this->json(['error' => 'Resource not found'], 404);
+            return;
+        }
+
+        http_response_code(404);
+        $this->render('NotFound', [
+            'title' => '404 - Page introuvable | IranWatch',
+            'metaDescription' => 'La page demandee est introuvable.',
+            'robots' => 'noindex, follow',
+            'currentPage' => '',
+        ]);
+    }
+}

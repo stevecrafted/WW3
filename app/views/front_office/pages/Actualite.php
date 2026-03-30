@@ -3,14 +3,14 @@
  * @var array $articles Liste des articles (objets stdClass)
  * @var object $section Section actuelle (pour les infos)
  */
- 
+
 $hero = $articles[0] ?? null; 
 $others =  $articles;
 ?>
 
 <!-- EN-TÊTE DE SECTION -->
 <div class="section-header">
-    <h1 class="section-header__title">Actualité</h1>
+    <h1 class="section-header__title">Actualité Guerre en Iran</h1>
     <div class="section-header__line" aria-hidden="true"></div>
     <span class="section-header__date" id="js-date-long"></span>
 </div>
