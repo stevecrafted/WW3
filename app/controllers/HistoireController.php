@@ -5,7 +5,7 @@ use app\models\Section;
 use app\models\Contenu;
 use app\models\Image;
 
-class HistoireController
+class HistoireController extends BaseController
 {
     public function index()
     {
@@ -14,7 +14,7 @@ class HistoireController
 
         if (!$section) {
             error_log("Section 'histoire' introuvable");
-            \Flight::notFound();
+            $this->notFound();
             return;
         }
 
@@ -43,8 +43,7 @@ class HistoireController
             'section'         => $section,
         ];
 
-        $content = \Flight::view()->fetch('front_office/pages/histoire', $data);
-        \Flight::render('front_office/layouts/main', array_merge($data, ['content' => $content]));
+        $this->render('Histoire', $data);
     }
 
     public function show($slug)
@@ -53,7 +52,7 @@ class HistoireController
         $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
 
         if (!$article) {
-            \Flight::notFound();
+            $this->notFound();
             return;
         }
 
@@ -76,7 +75,6 @@ class HistoireController
             'article'         => $article,
         ];
 
-        $content = \Flight::view()->fetch('front_office/pages/article', $data);
-        \Flight::render('front_office/layouts/main', array_merge($data, ['content' => $content]));
+        $this->render('Article', $data);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 namespace app\models;
 
-use Flight;
 use PDO;
 
 class Contenu
@@ -10,7 +9,7 @@ class Contenu
 
     public function __construct()
     {
-        $this->db = Flight::db();
+        $this->db = Database::getConnection();
     }
 
     public function findOne(array $conditions): ?object
@@ -23,8 +22,6 @@ class Contenu
         }
         $sql = rtrim($sql, 'AND ');
         $sql .= " LIMIT 1";
-
-        error_log($sql);
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
@@ -56,8 +53,6 @@ class Contenu
         if (!empty($options['limit'])) {
             $sql .= " LIMIT " . (int) $options['limit'];
         }
-
-        error_log($sql);
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();

@@ -1,20 +1,20 @@
 <?php
+
 namespace app\controllers;
 
-use app\models\Section;
 use app\models\Contenu;
+use app\models\Image;
+use app\models\Section;
 
-class ActualiteController
-{ 
-
-    public function index()
+class ActualiteController extends BaseController
+{
+    public function index(): void
     {
         $sectionModel = new Section();
         $section = $sectionModel->findOne(['slug' => 'actualite']);
 
         if (!$section) {
-            error_log("Pas de section");
-            \Flight::notFound();
+            $this->notFound();
             return;
         }
 
@@ -24,54 +24,49 @@ class ActualiteController
             ['order' => 'created_at DESC']
         );
 
-        // error_log("Nombre d'articles : " . count($articles));
-        if (count($articles) == 0) {
-            error_log("Yst article");
-        } 
-
-        // Pour chaque article, charger ses images (si nécessaire)
-        $imageModel = new \app\models\Image();
+        $imageModel = new Image();
         foreach ($articles as $article) {
-            $article->images = $imageModel->findAll(['content_id' => $article->id], ['order' => 'created_at ASC']);
+            $article->images = $imageModel->findAll(
+                ['content_id' => $article->id],
+                ['order' => 'display_order ASC']
+            );
+            $article->image_principale = $article->images[0] ?? null;
         }
 
-        $data = [
-            'title'           => $section->meta_title ?? $section->title . ' — IranWatch',
-            'metaDescription' => $section->meta_description ?? 'Suivez l’actualité du conflit Iran-USA-Israël',
-            'currentPage'     => 'actualite',
-            'articles'        => $articles,
-        ];
-
-        $content = \Flight::view()->fetch('front_office/pages/actualite', $data);
-        \Flight::render('front_office/layouts/main', array_merge($data, ['content' => $content]));
+        $this->render('Actualite', [
+            'title' => $section->meta_title ?? $section->title . ' - IranWatch',
+            'metaDescription' => $section->meta_description ?? 'Suivez l actualite du conflit Iran-USA-Israel',
+            'currentPage' => 'actualite',
+            'articles' => $articles,
+            'section' => $section,
+        ]);
     }
 
-    public function show($slug)
+    public function show(string $slug): void
     {
         $contenuModel = new Contenu();
         $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
 
         if (!$article) {
-            \Flight::notFound();
+            $this->notFound();
             return;
         }
 
-        // Charger les images
-        $imageModel = new \app\models\Image();
-        $article->images = $imageModel->findAll(['id_contenu' => $article->id], ['order' => 'ordre ASC']);
+        $imageModel = new Image();
+        $article->images = $imageModel->findAll(
+            ['content_id' => $article->id],
+            ['order' => 'display_order ASC']
+        );
+        $article->image_principale = $article->images[0] ?? null;
 
-        // Charger la section
         $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
-        $data = [
-            'title'           => $article->meta_title ?? $article->title . ' — IranWatch',
-            'metaDescription' => $article->meta_description ?? strip_tags($article->resume),
-            'currentPage'     => 'actualite',
-            'article'         => $article,
-        ];
-
-        $content = \Flight::view()->fetch('front_office/pages/article', $data);
-        \Flight::render('front_office/layouts/main', array_merge($data, ['content' => $content]));
+        $this->render('Article', [
+            'title' => $article->meta_title ?? $article->title . ' - IranWatch',
+            'metaDescription' => $article->meta_description ?? strip_tags($article->summary ?? ''),
+            'currentPage' => 'actualite',
+            'article' => $article,
+        ]);
     }
 }

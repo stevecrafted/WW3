@@ -20,7 +20,7 @@
         content="<?= htmlspecialchars($ogImage ?? 'https://iranwatch.example.com/og-image.jpg') ?>" />
     <meta property="og:url" content="<?= htmlspecialchars($ogUrl ?? 'https://iranwatch.example.com/') ?>" />
 
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body>

@@ -1,7 +1,6 @@
 <?php
 namespace app\models;
 
-use Flight;
 use PDO;
 
 class Section
@@ -10,7 +9,7 @@ class Section
 
     public function __construct()
     {
-        $this->db = Flight::db();
+        $this->db = Database::getConnection();
     }
 
     public function findOne(array $conditions): ?object
