@@ -8,3 +8,5 @@ request
 *.cache
 public/uploads/contents
 cache/
+*.cache
+public/uploads/contents

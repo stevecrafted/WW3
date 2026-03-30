@@ -57,6 +57,8 @@ $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
 $baseController = new app\controllers\BaseController();
+$sectionAdminController = new app\controllers\SectionAdminController();
+$contentAdminController = new app\controllers\ContentAdminController();
 
 if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
   $actualiteController->index();
@@ -90,6 +92,51 @@ if ($method === 'GET' && preg_match('#^/api/users/(\d+)$#', $path, $matches)) {
 
 if ($method === 'POST' && preg_match('#^/api/users/(\d+)$#', $path, $matches)) {
   $apiController->updateUser((int) $matches[1]);
+  exit;
+}
+
+if ($method === 'GET' && $path === '/admin/sections') {
+  $sectionAdminController->index();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/admin/sections/save') {
+  $sectionAdminController->save();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/admin/sections/delete') {
+  $sectionAdminController->delete();
+  exit;
+}
+
+if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents$#', $path, $matches)) {
+  $contentAdminController->index((int) $matches[1]);
+  exit;
+}
+
+if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents/(\d+)$#', $path, $matches)) {
+  $contentAdminController->show((int) $matches[1], (int) $matches[2]);
+  exit;
+}
+
+if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents/create$#', $path, $matches)) {
+  $contentAdminController->createForm((int) $matches[1]);
+  exit;
+}
+
+if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents/(\d+)/edit$#', $path, $matches)) {
+  $contentAdminController->editForm((int) $matches[1], (int) $matches[2]);
+  exit;
+}
+
+if ($method === 'POST' && preg_match('#^/admin/sections/(\d+)/contents/save$#', $path, $matches)) {
+  $contentAdminController->save((int) $matches[1]);
+  exit;
+}
+
+if ($method === 'POST' && preg_match('#^/admin/sections/(\d+)/contents/(\d+)/delete$#', $path, $matches)) {
+  $contentAdminController->delete((int) $matches[1], (int) $matches[2]);
   exit;
 }
 
