@@ -35,8 +35,10 @@ class BaseController
             return;
         }
 
-        // Fusion des données
-        $data['sections'] = $this->sections;
+        // Fusion des donnees
+        if (!array_key_exists('sections', $data)) {
+            $data['sections'] = $this->sections;
+        }
         extract($data, EXTR_SKIP);
 
         // Capture du contenu de la vue

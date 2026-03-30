@@ -73,10 +73,7 @@ class Section
     {
         $sql = 'SELECT * FROM section WHERE id = :id';
         $params = [':id' => $id];
-
-        if ($includeDeleted === false) {
-            $sql .= ' AND deleted_at IS NULL';
-        }
+ 
 
         $sql .= ' LIMIT 1';
 
@@ -102,7 +99,7 @@ class Section
 
             $sql = 'SELECT id, name, slug, title, created_at, updated_at'
                 . ' FROM section'
-                . ' WHERE ' . $whereSql
+                . ($whereSql !== '' ? (' WHERE ' . $whereSql) : '')
                 . ' ORDER BY updated_at DESC, id DESC'
                 . ' LIMIT :limit OFFSET :offset';
 
@@ -121,7 +118,8 @@ class Section
         $total = $this->cache->remember($totalCacheKey, self::LIST_CACHE_TTL, function () use ($filters): int {
             $params = [];
             $whereSql = $this->buildSearchWhereClause($filters, $params);
-            $sql = 'SELECT COUNT(*) FROM section WHERE ' . $whereSql;
+            $sql = 'SELECT COUNT(*) FROM section'
+                . ($whereSql !== '' ? (' WHERE ' . $whereSql) : '');
 
             $stmt = $this->db->prepare($sql);
             foreach ($params as $paramKey => $paramValue) {
@@ -160,7 +158,7 @@ class Section
     {
         $sql = 'UPDATE section'
             . ' SET name = :name, slug = :slug, title = :title, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id AND deleted_at IS NULL';
+            . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([
@@ -181,7 +179,7 @@ class Section
     public function softDelete(int $id): bool
     {
         $sql = 'UPDATE section SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id AND deleted_at IS NULL';
+            . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([':id' => $id]);
@@ -242,7 +240,7 @@ class Section
 
     private function buildSearchWhereClause(array $filters, array &$params): string
     {
-        $clauses = ['deleted_at IS NULL'];
+        $clauses = [];
 
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ($keyword !== '') {

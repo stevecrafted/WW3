@@ -75,10 +75,6 @@ class Contenu
         $sql = 'SELECT * FROM content WHERE id = :id';
         $params = [':id' => $id];
 
-        if ($includeDeleted === false) {
-            $sql .= ' AND deleted_at IS NULL';
-        }
-
         $sql .= ' LIMIT 1';
 
         $stmt = $this->db->prepare($sql);
@@ -103,7 +99,8 @@ class Contenu
 
             $sql = 'SELECT id, section_id, title, summary, meta_title, slug, meta_description, created_at, updated_at'
                 . ' FROM content'
-                . ' WHERE section_id = :section_id AND ' . $whereSql
+                . ' WHERE section_id = :section_id'
+                . ($whereSql !== '' ? (' AND ' . $whereSql) : '')
                 . ' ORDER BY updated_at DESC, id DESC'
                 . ' LIMIT :limit OFFSET :offset';
 
@@ -122,7 +119,8 @@ class Contenu
         $total = $this->cache->remember($totalKey, self::LIST_CACHE_TTL, function () use ($sectionId, $filters): int {
             $params = [':section_id' => $sectionId];
             $whereSql = $this->buildSearchWhereClause($filters, $params);
-            $sql = 'SELECT COUNT(*) FROM content WHERE section_id = :section_id AND ' . $whereSql;
+            $sql = 'SELECT COUNT(*) FROM content WHERE section_id = :section_id'
+                . ($whereSql !== '' ? (' AND ' . $whereSql) : '');
 
             $stmt = $this->db->prepare($sql);
             foreach ($params as $paramKey => $paramValue) {
@@ -169,7 +167,7 @@ class Contenu
             . ' SET title = :title, summary = :summary, content_text = :content_text,'
             . ' meta_title = :meta_title, slug = :slug, meta_description = :meta_description,'
             . ' updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id AND deleted_at IS NULL';
+            . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([
@@ -193,7 +191,7 @@ class Contenu
     public function softDelete(int $id): bool
     {
         $sql = 'UPDATE content SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id AND deleted_at IS NULL';
+            . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([':id' => $id]);
@@ -255,7 +253,7 @@ class Contenu
 
     private function buildSearchWhereClause(array $filters, array &$params): string
     {
-        $clauses = ['deleted_at IS NULL'];
+        $clauses = [];
 
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ($keyword !== '') {

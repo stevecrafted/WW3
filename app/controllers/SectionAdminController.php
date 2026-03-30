@@ -15,6 +15,7 @@ class SectionAdminController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
         $this->sectionModel = new Section();
     }
 

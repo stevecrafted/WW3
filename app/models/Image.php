@@ -75,7 +75,7 @@ class Image
     public function softDeleteByContentId(int $contentId): bool
     {
         $sql = 'UPDATE image SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE content_id = :content_id AND deleted_at IS NULL';
+            . ' WHERE content_id = :content_id  ';
 
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([':content_id' => $contentId]);
