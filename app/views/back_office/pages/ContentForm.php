@@ -58,15 +58,18 @@ $cancelUrl = '/admin/sections/' . $sectionId . '/contents';
                 <?php if (!empty($images)): ?>
                     <div class="bo-list" style="margin-bottom: 20px;">
                         <h3 style="font-size: 0.95rem; color: #666; margin-bottom: 10px;">Images existantes</h3>
-                        <?php foreach ($images as $img): ?>
-                            <article class="bo-row" style="align-items: flex-start; gap: 12px;">
-                                <div style="flex: 1;">
-                                    <div class="bo-row-head" style="word-break: break-word;"><?= htmlspecialchars((string) ($img->url ?? '')) ?></div>
-                                    <div class="bo-row-sub">Alt: <?= htmlspecialchars((string) ($img->alt_text ?? '')) ?></div>
-                                    <div class="bo-row-sub">Ordre: <?= (int) ($img->display_order ?? 0) ?></div>
-                                </div>
-                            </article>
-                        <?php endforeach; ?>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px;">
+                                <?php foreach ($images as $img): ?>
+                                    <div style="border: 2px solid #ddd; border-radius: 8px; overflow: hidden; background: #f9f9f9;">
+                                        <img src="<?= htmlspecialchars((string) ($img->url ?? '')) ?>" alt="<?= htmlspecialchars((string) ($img->alt_text ?? '')) ?>" style="width: 100%; height: 120px; object-fit: cover; display: block;" />
+                                        <div style="padding: 8px;">
+                                            <div style="font-size: 0.75rem; color: #666; margin-bottom: 4px; word-break: break-word;"><strong>Alt:</strong></div>
+                                            <div style="font-size: 0.7rem; color: #999; margin-bottom: 4px;"><?= htmlspecialchars((string) ($img->alt_text ?? '')) ?></div>
+                                            <div style="font-size: 0.75rem; color: #666;"><strong>Ordre:</strong> <?= (int) ($img->display_order ?? 0) ?></div>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                     </div>
                 <?php endif; ?>
 
@@ -134,13 +137,18 @@ $cancelUrl = '/admin/sections/' . $sectionId . '/contents';
             var sectionId = 'image-section-' + index;
             var section = document.createElement('div');
             section.id = sectionId;
-            section.style.cssText = 'border: 1px solid #ddd; border-radius: 8px; padding: 12px; background: #fafafa;';
+                section.style.cssText = 'border: 2px solid #ddd; border-radius: 8px; padding: 12px; background: #fafafa; display: grid; gap: 12px;';
             
-            section.innerHTML = '' +
-                '<div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: flex-end;">' +
+                var previewId = 'preview-' + index;
+            
+                section.innerHTML = '' +
+                    '<div id="' + previewId + '" style="width: 100%; height: 150px; background: #e8e8e8; border: 2px dashed #999; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: #999; overflow: hidden;">' +
+                        'Aperçu de l\'image' +
+                    '</div>' +
+                    '<div style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 12px; align-items: flex-end;">' +
                     '<div>' +
                         '<label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Image</label>' +
-                        '<input type="file" name="images_file[]" accept="image/*" class="bo-field" />' +
+                            '<input type="file" name="images_file[]" accept="image/*" class="bo-field image-file-input" data-preview-id="' + previewId + '" />' +
                     '</div>' +
                     '<div>' +
                         '<label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px;">Alt text</label>' +
@@ -202,6 +210,7 @@ $cancelUrl = '/admin/sections/' . $sectionId . '/contents';
                 imageContainer.appendChild(createImageUploadSection(imageCounter));
                 imageCounter++;
                 attachRemoveHandlers();
+                    attachImagePreviewHandlers();
                 attachOrderValidation();
             });
 
@@ -211,6 +220,29 @@ $cancelUrl = '/admin/sections/' . $sectionId . '/contents';
                     validateImageOrders();
                 });
             }
+
+                // Fonction pour afficher les previews d'images
+                function attachImagePreviewHandlers() {
+                    var fileInputs = imageContainer.querySelectorAll('.image-file-input');
+                    fileInputs.forEach(function (input) {
+                        if (!input.dataset.previewAttached) {
+                            input.dataset.previewAttached = 'true';
+                            input.addEventListener('change', function (e) {
+                                var file = e.target.files[0];
+                                var previewId = input.getAttribute('data-preview-id');
+                                var previewDiv = document.getElementById(previewId);
+                            
+                                if (file && previewDiv) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (event) {
+                                        previewDiv.innerHTML = '<img src="' + event.target.result + '" alt="preview" style="width: 100%; height: 100%; object-fit: cover;" />';
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        }
+                    });
+                }
 
             // Délégation d'événement pour les boutons "Retirer"
             function attachRemoveHandlers() {
@@ -245,6 +277,7 @@ $cancelUrl = '/admin/sections/' . $sectionId . '/contents';
 
             attachRemoveHandlers();
             attachOrderValidation();
+            attachImagePreviewHandlers();
         }
 
         // Initialisation de TinyMCE

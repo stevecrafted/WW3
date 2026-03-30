@@ -76,6 +76,33 @@ class ContentAdminController extends BaseController
         ]);
     }
 
+    public function show(int $sectionId, int $contentId): void
+    {
+        $section = $this->sectionModel->findById($sectionId);
+        if (!$section) {
+            $this->notFound();
+            return;
+        }
+
+        $contentItem = $this->contentModel->findById($contentId);
+        if (!$contentItem || (int) $contentItem->section_id !== $sectionId) {
+            $this->notFound();
+            return;
+        }
+
+        $images = $this->imageModel->findAll([
+            'content_id' => $contentId,
+            'deleted_at' => null,
+        ], ['order' => 'display_order ASC, id ASC']);
+
+        $this->renderBackOffice('ContentShow', [
+            'title' => 'Back Office - ' . htmlspecialchars($contentItem->title),
+            'section' => $section,
+            'content' => $contentItem,
+            'images' => $images,
+        ]);
+    }
+
     public function createForm(int $sectionId): void
     {
         $section = $this->sectionModel->findById($sectionId);

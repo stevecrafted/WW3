@@ -277,21 +277,20 @@ $buildUrl = static function (array $params = []) use ($filters, $page): string {
                 <?php endif; ?>
 
                 <?php foreach ($sections as $section): ?>
-                    <article class="bo-row">
+                    <article class="bo-row" style="cursor: pointer;" onclick="window.location.href = '<?= htmlspecialchars('/admin/sections/' . (int) $section->id . '/contents') ?>'">
                         <div>
                             <div class="bo-row-head">
-                                <a href="<?= htmlspecialchars('/admin/sections/' . (int) $section->id . '/contents') ?>"><?= htmlspecialchars($section->name) ?></a>
+                                <?= htmlspecialchars($section->name) ?>
                             </div>
                             <div class="bo-row-sub">Titre: <?= htmlspecialchars($section->title) ?></div>
                             <div class="bo-row-sub">Slug: <?= htmlspecialchars($section->slug) ?></div>
                         </div>
-                        <div class="bo-row-actions">
+                        <div class="bo-row-actions" onclick="event.stopPropagation();">
                             <a href="<?= htmlspecialchars($buildUrl(['edit' => (int) $section->id])) ?>">Modifier</a>
                             <form method="POST" action="/admin/sections/delete" onsubmit="return confirm('Confirmer la suppression de cette section ?');">
                                 <input type="hidden" name="id" value="<?= (int) $section->id ?>" />
                                 <button type="submit" class="bo-btn-danger">Supprimer</button>
                             </form>
-                            <a href="<?= htmlspecialchars('/admin/sections/' . (int) $section->id . '/contents') ?>" aria-label="Voir les contenus de la section">&rarr;</a>
                         </div>
                     </article>
                 <?php endforeach; ?>

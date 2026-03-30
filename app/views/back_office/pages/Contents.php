@@ -57,7 +57,7 @@ $buildUrl = static function (array $params = []) use ($filters, $page, $sectionI
             <?php endif; ?>
 
             <?php foreach ($contents as $contentItem): ?>
-                <article class="bo-row" style="align-items: center; gap: 16px;">
+                <article class="bo-row" style="align-items: center; gap: 16px; cursor: pointer;" onclick="window.location.href = '<?= htmlspecialchars('/admin/sections/' . $sectionId . '/contents/' . (int) $contentItem->id) ?>'">
                     <?php if (!empty($contentItem->first_image)): ?>
                         <img src="<?= htmlspecialchars((string) ($contentItem->first_image->url ?? '')) ?>" alt="<?= htmlspecialchars((string) ($contentItem->first_image->alt_text ?? '')) ?>" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; flex-shrink: 0;" />
                     <?php else: ?>
@@ -68,7 +68,7 @@ $buildUrl = static function (array $params = []) use ($filters, $page, $sectionI
                         <div class="bo-row-sub">Meta titre: <?= htmlspecialchars((string) ($contentItem->meta_title ?? '')) ?></div>
                         <div class="bo-row-sub">Slug: <?= htmlspecialchars($contentItem->slug) ?></div>
                     </div>
-                    <div class="bo-row-actions">
+                    <div class="bo-row-actions" onclick="event.stopPropagation();">
                         <a href="<?= htmlspecialchars('/admin/sections/' . $sectionId . '/contents/' . (int) $contentItem->id . '/edit') ?>">Modifier</a>
                         <form method="POST" action="<?= htmlspecialchars('/admin/sections/' . $sectionId . '/contents/' . (int) $contentItem->id . '/delete') ?>" onsubmit="return confirm('Confirmer la suppression de ce contenu ?');">
                             <button type="submit" class="bo-btn-danger">Supprimer</button>

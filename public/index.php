@@ -101,6 +101,11 @@ if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents$#', $path,
   exit;
 }
 
+if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents/(\d+)$#', $path, $matches)) {
+  $contentAdminController->show((int) $matches[1], (int) $matches[2]);
+  exit;
+}
+
 if ($method === 'GET' && preg_match('#^/admin/sections/(\d+)/contents/create$#', $path, $matches)) {
   $contentAdminController->createForm((int) $matches[1]);
   exit;
