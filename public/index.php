@@ -15,6 +15,10 @@ if (!is_file($configPath)) {
 
 require $configPath;
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+
 spl_autoload_register(static function (string $class) use ($projectRoot): void {
   $prefix = 'app\\';
   if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
@@ -57,10 +61,39 @@ $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
 $baseController = new app\controllers\BaseController();
+$authController = new app\controllers\AuthController();
 $sectionAdminController = new app\controllers\SectionAdminController();
 $contentAdminController = new app\controllers\ContentAdminController();
 
-if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
+if ($method === 'GET' && $path === '/') {
+  $authController->home();
+  exit;
+}
+
+if ($method === 'GET' && $path === '/login') {
+  $authController->showLogin();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/login') {
+  $authController->login();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/logout') {
+  $authController->logout();
+  exit;
+}
+
+if (strncmp($path, '/admin/', 7) === 0) {
+  $isAuthenticated = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']);
+  if (!$isAuthenticated) {
+    header('Location: /login');
+    exit;
+  }
+}
+
+if ($method === 'GET' && $path === '/actualite') {
   $actualiteController->index();
   exit;
 }

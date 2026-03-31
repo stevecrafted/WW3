@@ -62,6 +62,19 @@ CREATE TABLE image (
         ON DELETE CASCADE
 );
 
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME NULL
+);
+
+INSERT INTO user (user_name, password)
+VALUES ('admin', 'admin');
+
 -- =========================
 -- DONNEES MINIMALES
 -- =========================
