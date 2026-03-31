@@ -163,12 +163,13 @@ class Section
 
     public function createSection(array $payload): int
     {
-        $sql = 'INSERT INTO section (name, slug, title) VALUES (:name, :slug, :title)';
+        $sql = 'INSERT INTO section (name, slug, title, user_id) VALUES (:name, :slug, :title, :user_id)';
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([
             ':name' => $payload['name'],
             ':slug' => $payload['slug'],
             ':title' => $payload['title'],
+            ':user_id' => $payload['user_id'],
         ]);
 
         if ($ok) {
@@ -182,7 +183,7 @@ class Section
     public function updateSection(int $id, array $payload): bool
     {
         $sql = 'UPDATE section'
-            . ' SET name = :name, slug = :slug, title = :title, updated_at = CURRENT_TIMESTAMP'
+            . ' SET name = :name, slug = :slug, title = :title, user_id = :user_id, updated_at = CURRENT_TIMESTAMP'
             . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
@@ -190,6 +191,7 @@ class Section
             ':name' => $payload['name'],
             ':slug' => $payload['slug'],
             ':title' => $payload['title'],
+            ':user_id' => $payload['user_id'],
             ':id' => $id,
         ]);
 
@@ -201,13 +203,20 @@ class Section
         return false;
     }
 
-    public function softDelete(int $id): bool
+    public function softDelete(int $id, ?int $userId = null): bool
     {
-        $sql = 'UPDATE section SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id  ';
+        $sql = 'UPDATE section SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP';
+        $params = [':id' => $id];
+
+        if ($userId !== null) {
+            $sql .= ', user_id = :user_id';
+            $params[':user_id'] = $userId;
+        }
+
+        $sql .= ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
-        $ok = $stmt->execute([':id' => $id]);
+        $ok = $stmt->execute($params);
 
         if ($ok && $stmt->rowCount() > 0) {
             $this->clearListCaches();

@@ -183,8 +183,8 @@ class Contenu
 
     public function createContent(int $sectionId, array $payload): int
     {
-        $sql = 'INSERT INTO content (section_id, title, summary, content_text, meta_title, slug, meta_description)'
-            . ' VALUES (:section_id, :title, :summary, :content_text, :meta_title, :slug, :meta_description)';
+        $sql = 'INSERT INTO content (section_id, title, summary, content_text, meta_title, slug, meta_description, user_id)'
+            . ' VALUES (:section_id, :title, :summary, :content_text, :meta_title, :slug, :meta_description, :user_id)';
 
         $stmt = $this->db->prepare($sql);
         $ok = $stmt->execute([
@@ -195,6 +195,7 @@ class Contenu
             ':meta_title' => $payload['meta_title'],
             ':slug' => $payload['slug'],
             ':meta_description' => $payload['meta_description'],
+            ':user_id' => $payload['user_id'],
         ]);
 
         if ($ok) {
@@ -210,7 +211,7 @@ class Contenu
         $sql = 'UPDATE content'
             . ' SET title = :title, summary = :summary, content_text = :content_text,'
             . ' meta_title = :meta_title, slug = :slug, meta_description = :meta_description,'
-            . ' updated_at = CURRENT_TIMESTAMP'
+            . ' user_id = :user_id, updated_at = CURRENT_TIMESTAMP'
             . ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
@@ -221,6 +222,7 @@ class Contenu
             ':meta_title' => $payload['meta_title'],
             ':slug' => $payload['slug'],
             ':meta_description' => $payload['meta_description'],
+            ':user_id' => $payload['user_id'],
             ':id' => $id,
         ]);
 
@@ -232,13 +234,20 @@ class Contenu
         return false;
     }
 
-    public function softDelete(int $id): bool
+    public function softDelete(int $id, ?int $userId = null): bool
     {
-        $sql = 'UPDATE content SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP'
-            . ' WHERE id = :id  ';
+        $sql = 'UPDATE content SET deleted_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP';
+        $params = [':id' => $id];
+
+        if ($userId !== null) {
+            $sql .= ', user_id = :user_id';
+            $params[':user_id'] = $userId;
+        }
+
+        $sql .= ' WHERE id = :id  ';
 
         $stmt = $this->db->prepare($sql);
-        $ok = $stmt->execute([':id' => $id]);
+        $ok = $stmt->execute($params);
 
         if ($ok && $stmt->rowCount() > 0) {
             $this->clearListCaches();

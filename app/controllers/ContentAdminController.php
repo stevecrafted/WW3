@@ -169,6 +169,12 @@ class ContentAdminController extends BaseController
             return;
         }
 
+        $userId = $this->getAuthenticatedUserId();
+        if ($userId === null) {
+            $this->redirectToForm($sectionId, $id > 0 ? $id : null, 'Utilisateur non authentifie');
+            return;
+        }
+
         $slug = $slugInput !== ''
             ? $this->contentModel->generateUniqueSlug($slugInput, $id > 0 ? $id : null)
             : $this->contentModel->generateUniqueSlug($metaTitle, $id > 0 ? $id : null);
@@ -180,6 +186,7 @@ class ContentAdminController extends BaseController
             'title' => $title,
             'summary' => $summary,
             'content_text' => $contentText,
+            'user_id' => $userId,
         ];
 
         $contentId = 0;
@@ -238,7 +245,13 @@ class ContentAdminController extends BaseController
             return;
         }
 
-        $ok = $this->contentModel->softDelete($contentId);
+        $userId = $this->getAuthenticatedUserId();
+        if ($userId === null) {
+            $this->notFound();
+            return;
+        }
+
+        $ok = $this->contentModel->softDelete($contentId, $userId);
         if ($ok) {
             $this->imageModel->softDeleteByContentId($contentId);
         }
