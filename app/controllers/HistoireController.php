@@ -7,6 +7,11 @@ use app\models\Image;
 
 class HistoireController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         $sectionModel = new Section();
@@ -19,18 +24,12 @@ class HistoireController extends BaseController
         }
 
         $contenuModel = new Contenu();
-        $articles = $contenuModel->findAll(
-            ['section_id' => $section->id, 'deleted_at' => null],
-            ['order' => 'created_at DESC']   // On peut trier par date, ou par ordre personnalisé si besoin
-        );
+        $articles = $contenuModel->getFrontArticlesBySectionId((int) $section->id);
 
         // Récupération des images
         $imageModel = new Image();
         foreach ($articles as $article) {
-            $article->images = $imageModel->findAll(
-                ['content_id' => $article->id],
-                ['order' => 'display_order ASC']
-            );
+            $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
             $article->image_principale = $article->images[0] ?? null;
         }
 
@@ -46,26 +45,34 @@ class HistoireController extends BaseController
         $this->render('Histoire', $data);
     }
 
-    public function show($slug)
+    public function show(int $id, ?string $slug = null)
     {
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
+        $article = $contenuModel->getFrontArticleById($id);
 
         if (!$article) {
             $this->notFound();
             return;
         }
 
+        $sectionModel = new Section();
+        $section = $sectionModel->findOne(['id' => $article->section_id]);
+        if (!$section || $section->slug !== 'histoire') {
+            $this->notFound();
+            return;
+        }
+
+        if ($slug === null || $slug !== $article->slug) {
+            header('Location: /histoire/' . $article->id . '-' . $article->slug, true, 301);
+            exit;
+        }
+
         // Charger les images
         $imageModel = new Image();
-        $article->images = $imageModel->findAll(
-            ['content_id' => $article->id],
-            ['order' => 'display_order ASC']
-        );
+        $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
         $article->image_principale = $article->images[0] ?? null;
 
         // Charger la section
-        $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
         $data = [

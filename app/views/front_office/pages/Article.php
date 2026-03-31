@@ -37,6 +37,6 @@
     </div>
 
     <div class="article__body" style="margin-top: 1rem;">
-        <?= nl2br(htmlspecialchars($article->content_text ?? '')) ?>
+        <?= $article->content_text ?? '' ?>
     </div>
 </article>

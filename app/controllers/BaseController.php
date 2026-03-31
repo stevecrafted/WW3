@@ -1,12 +1,31 @@
 <?php
 
 namespace app\controllers;
+use app\models\Section;
 
 class BaseController
 {
+    protected $sections;
+
+    public function __construct()
+    {
+        $sectionModel = new Section();
+        $this->sections = $sectionModel->getFrontSections();
+    }
+
     protected function render(string $viewPath, array $data = []): void
     {
-        $baseViewPath = dirname(__DIR__) . '/views/front_office';
+        $this->renderTemplate('front_office', $viewPath, $data);
+    }
+
+    protected function renderBackOffice(string $viewPath, array $data = []): void
+    {
+        $this->renderTemplate('back_office', $viewPath, $data);
+    }
+
+    private function renderTemplate(string $scope, string $viewPath, array $data = []): void
+    {
+        $baseViewPath = dirname(__DIR__) . '/views/' . $scope;
         $viewFile = $baseViewPath . '/pages/' . $viewPath . '.php';
         $layoutFile = $baseViewPath . '/layouts/main.php';
 
@@ -16,12 +35,18 @@ class BaseController
             return;
         }
 
+        // Fusion des donnees
+        if (!array_key_exists('sections', $data)) {
+            $data['sections'] = $this->sections;
+        }
         extract($data, EXTR_SKIP);
 
+        // Capture du contenu de la vue
         ob_start();
         require $viewFile;
         $content = ob_get_clean();
 
+        // Inclusion du layout (qui utilise $content)
         require $layoutFile;
     }
 

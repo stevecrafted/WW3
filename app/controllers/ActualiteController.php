@@ -8,6 +8,11 @@ use app\models\Section;
 
 class ActualiteController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index(): void
     {
         $sectionModel = new Section();
@@ -19,17 +24,11 @@ class ActualiteController extends BaseController
         }
 
         $contenuModel = new Contenu();
-        $articles = $contenuModel->findAll(
-            ['section_id' => $section->id, 'deleted_at' => null],
-            ['order' => 'created_at DESC']
-        );
+        $articles = $contenuModel->getFrontArticlesBySectionId((int) $section->id);
 
         $imageModel = new Image();
         foreach ($articles as $article) {
-            $article->images = $imageModel->findAll(
-                ['content_id' => $article->id],
-                ['order' => 'display_order ASC']
-            );
+            $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
             $article->image_principale = $article->images[0] ?? null;
         }
 
@@ -42,24 +41,32 @@ class ActualiteController extends BaseController
         ]);
     }
 
-    public function show(string $slug): void
+    public function show(int $id, ?string $slug = null): void
     {
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['slug' => $slug, 'deleted_at' => null]);
+    $article = $contenuModel->getFrontArticleById($id);
 
         if (!$article) {
             $this->notFound();
             return;
         }
 
+        $sectionModel = new Section();
+        $section = $sectionModel->findOne(['id' => $article->section_id]);
+        if (!$section || $section->slug !== 'actualite') {
+            $this->notFound();
+            return;
+        }
+
+        if ($slug === null || $slug !== $article->slug) {
+            header('Location: /actualite/' . $article->id . '-' . $article->slug, true, 301);
+            exit;
+        }
+
         $imageModel = new Image();
-        $article->images = $imageModel->findAll(
-            ['content_id' => $article->id],
-            ['order' => 'display_order ASC']
-        );
+        $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
         $article->image_principale = $article->images[0] ?? null;
 
-        $sectionModel = new Section();
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);
 
         $this->render('Article', [

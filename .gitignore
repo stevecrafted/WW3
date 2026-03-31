@@ -4,3 +4,9 @@ composer.lock
 .vagrant/
 .runway-creds.json
 request
+request
+*.cache
+public/uploads/contents
+cache/
+*.cache
+public/uploads/contents

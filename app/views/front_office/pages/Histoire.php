@@ -32,7 +32,7 @@ $others = array_slice($articles, 3);
             <?php endif; ?>
             <span class="article__tag" itemprop="articleSection">Événement historique</span>
             <h2 class="article__title" itemprop="headline">
-                <a href="/histoire/<?= htmlspecialchars($hero->slug) ?>"><?= htmlspecialchars($hero->title) ?></a>
+                <a href="/histoire/<?= (int) $hero->id ?>-<?= htmlspecialchars($hero->slug) ?>"><?= htmlspecialchars($hero->title) ?></a>
             </h2>
             <p class="article__chapo" itemprop="description">
                 <?= htmlspecialchars($hero->summary ?? substr(strip_tags($hero->content_text), 0, 200)) ?>
@@ -56,7 +56,7 @@ $others = array_slice($articles, 3);
                 <div class="img-placeholder article__img" style="width:100%;aspect-ratio:4/3;">IMAGE</div>
             <?php endif; ?>
             <h3 class="article__title" itemprop="headline">
-                <a href="/histoire/<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
+                <a href="/histoire/<?= (int) $article->id ?>-<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
             </h3>
             <div class="article__meta">
                 <time class="article__meta-time" datetime="<?= $article->created_at ?>">
@@ -86,7 +86,7 @@ $others = array_slice($articles, 3);
                 <div class="article__body">
                     <span class="article__tag">Histoire</span>
                     <h3 class="article__title" itemprop="headline">
-                        <a href="/histoire/<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
+                        <a href="/histoire/<?= (int) $article->id ?>-<?= htmlspecialchars($article->slug) ?>"><?= htmlspecialchars($article->title) ?></a>
                     </h3>
                     <p class="article__chapo" itemprop="description">
                         <?= htmlspecialchars($article->summary ?? substr(strip_tags($article->content_text), 0, 150)) ?>

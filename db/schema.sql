@@ -76,14 +76,22 @@ ON DUPLICATE KEY UPDATE title = VALUES(title);
 -- -- =========================
 -- -- INDEX (IMPORTANT pour perf SEO)
 -- -- =========================
+-- INDEX (IMPORTANT pour perf SEO)
+-- =========================
 
--- -- recherche rapide par slug
--- CREATE INDEX idx_section_slug ON section(slug);
--- CREATE INDEX idx_content_slug ON content(slug);
+-- slug est deja indexe par les contraintes UNIQUE
 
--- -- relation FK optimisée
--- CREATE INDEX idx_content_section ON content(section_id);
--- CREATE INDEX idx_image_content ON image(content_id);
+-- recherche multicritere section + tri
+CREATE INDEX idx_section_name ON section(name);
+CREATE INDEX idx_section_title ON section(title);
+CREATE INDEX idx_section_deleted_updated ON section(deleted_at, updated_at);
+CREATE INDEX idx_content_section_deleted_updated ON content(section_id, deleted_at, updated_at);
+CREATE INDEX idx_content_title ON content(title);
+CREATE INDEX idx_image_content_deleted_order ON image(content_id, deleted_at, display_order);
 
--- -- tri images
--- CREATE INDEX idx_image_order ON image(display_order);
+-- relation FK optimisee
+CREATE INDEX idx_content_section ON content(section_id);
+CREATE INDEX idx_image_content ON image(content_id);
+
+-- tri images
+CREATE INDEX idx_image_order ON image(display_order);
