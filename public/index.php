@@ -15,6 +15,24 @@ if (!is_file($configPath)) {
 
 require $configPath;
 
+// Disable PHP default session cache headers (no-store/no-cache) so we can control them manually.
+session_cache_limiter('');
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+
+$acceptEncoding = strtolower((string) ($_SERVER['HTTP_ACCEPT_ENCODING'] ?? ''));
+if (
+  strpos($acceptEncoding, 'gzip') !== false
+  && function_exists('ob_gzhandler')
+  && !headers_sent()
+  && !((bool) ini_get('zlib.output_compression'))
+) {
+  header('Vary: Accept-Encoding');
+  ob_start('ob_gzhandler');
+}
+
 spl_autoload_register(static function (string $class) use ($projectRoot): void {
   $prefix = 'app\\';
   if (strncmp($class, $prefix, strlen($prefix)) !== 0) {
@@ -39,6 +57,21 @@ $path = rtrim($path, '/');
 $path = $path === '' ? '/' : $path;
 $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
 
+$isAdminRoute = strncmp($path, '/admin/', 7) === 0;
+$isAuthRoute = in_array($path, ['/login', '/logout'], true);
+$isApiRoute = strncmp($path, '/api/', 5) === 0;
+
+if ($isAdminRoute || $isAuthRoute || $isApiRoute) {
+  header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+  header('Pragma: no-cache');
+  header('Expires: 0');
+} elseif ($method === 'GET') {
+  $ttl = 300;
+  header('Cache-Control: public, max-age=' . $ttl . ', s-maxage=' . $ttl . ', stale-while-revalidate=60');
+  header('Pragma: public');
+  header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $ttl) . ' GMT');
+}
+
 if ($method === 'GET' && isset($_GET['id']) && ctype_digit((string) $_GET['id']) && ($path === '/actualite' || $path === '/histoire')) {
   $contenuModel = new app\models\Contenu();
   $sectionModel = new app\models\Section();
@@ -57,10 +90,39 @@ $actualiteController = new app\controllers\ActualiteController();
 $histoireController = new app\controllers\HistoireController();
 $apiController = new app\controllers\ApiExampleController();
 $baseController = new app\controllers\BaseController();
+$authController = new app\controllers\AuthController();
 $sectionAdminController = new app\controllers\SectionAdminController();
 $contentAdminController = new app\controllers\ContentAdminController();
 
-if ($method === 'GET' && ($path === '/' || $path === '/actualite')) {
+if ($method === 'GET' && $path === '/') {
+  $authController->home();
+  exit;
+}
+
+if ($method === 'GET' && $path === '/login') {
+  $authController->showLogin();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/login') {
+  $authController->login();
+  exit;
+}
+
+if ($method === 'POST' && $path === '/logout') {
+  $authController->logout();
+  exit;
+}
+
+if (strncmp($path, '/admin/', 7) === 0) {
+  $isAuthenticated = isset($_SESSION['auth_user']) && is_array($_SESSION['auth_user']);
+  if (!$isAuthenticated) {
+    header('Location: /login');
+    exit;
+  }
+}
+
+if ($method === 'GET' && $path === '/actualite') {
   $actualiteController->index();
   exit;
 }
