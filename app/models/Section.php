@@ -8,8 +8,8 @@ class Section
 {
     private PDO $db;
     private FileCache $cache;
-    private const LIST_CACHE_TTL = 120;
-    private const FRONT_CACHE_TTL = 120;
+    private const LIST_CACHE_TTL = 5;
+    private const FRONT_CACHE_TTL = 5;
 
     public function __construct()
     {
@@ -301,8 +301,11 @@ class Section
 
     private function clearListCaches(): void
     {
-        $this->cache->forgetByPrefix('section_list_');
-        $this->cache->forgetByPrefix('section_count_');
-        $this->cache->forgetByPrefix('front_sections_');
+        $this->cache->forgetByPrefix('section_list');
+        $this->cache->forgetByPrefix('content_list');
+        $this->cache->forgetByPrefix('content_count');
+        $this->cache->forgetByPrefix('front_article');
+        $this->cache->forgetByPrefix('front_articles_section');
+        $this->cache->forgetByPrefix('front_images_content');
     }
 }

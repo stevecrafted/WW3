@@ -7,7 +7,7 @@ class Image
 {
     private PDO $db;
     private FileCache $cache;
-    private const FRONT_CACHE_TTL = 120;
+    private const FRONT_CACHE_TTL = 5;
 
     public function __construct()
     {

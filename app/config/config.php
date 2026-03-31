@@ -16,9 +16,8 @@ return [
 		'host' => getenv('DB_HOST') ?: 'localhost',
 		'dbname' => getenv('DB_NAME') ?: 'ww3',
 		'user' => getenv('DB_USER') ?: 'root',
-		'password' => getenv('DB_PASSWORD') ?: '',
+		'password' => getenv('DB_PASSWORD') ?: 'steve',
 		'charset' => 'utf8mb4',
 		// 'file_path' => __DIR__ . '/../../db/database.sqlite',
 	],
 ];
- 

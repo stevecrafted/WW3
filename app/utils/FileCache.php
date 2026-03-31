@@ -45,14 +45,20 @@ class FileCache
         return $value;
     }
 
+    /**
+     * Supprime tous les fichiers de cache dont la clé commence par un préfixe donné.
+     */
     public function forgetByPrefix(string $prefix): void
     {
         $safePrefix = $this->safeKey($prefix);
-
-        $files = glob($this->cacheDir . '/' . $safePrefix . '*.cache') ?: [];
-        foreach ($files as $filePath) {
-            if (is_file($filePath)) {
-                @unlink($filePath);
+        $pattern = $this->cacheDir . '/' . $safePrefix . '*.cache';
+        $files = glob($pattern);
+        if ($files === false) {
+            return;
+        }
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                @unlink($file);
             }
         }
     }

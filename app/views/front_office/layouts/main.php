@@ -62,7 +62,7 @@
                         <div class="nav-primary__divider" aria-hidden="true"></div>
                     <?php endforeach; ?>
                 <?php else: ?>
-                    <a href="">tsy misy</a>
+                    <a href="">Aucun section disponible</a>
                 <?php endif; ?>
             </div>
         </nav>
