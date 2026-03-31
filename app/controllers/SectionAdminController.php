@@ -71,6 +71,12 @@ class SectionAdminController extends BaseController
             return;
         }
 
+        $userId = $this->getAuthenticatedUserId();
+        if ($userId === null) {
+            $this->redirectWithNotice('Utilisateur non authentifie', $id > 0 ? $id : null);
+            return;
+        }
+
         $slug = $slugInput !== ''
             ? $this->sectionModel->generateUniqueSlug($slugInput, $id > 0 ? $id : null)
             : $this->sectionModel->generateUniqueSlug($title, $id > 0 ? $id : null);
@@ -80,6 +86,7 @@ class SectionAdminController extends BaseController
                 'name' => $name,
                 'title' => $title,
                 'slug' => $slug,
+                'user_id' => $userId,
             ]);
 
             $this->redirectWithNotice($ok ? 'Section modifiee' : 'Modification impossible', $ok ? null : $id);
@@ -90,6 +97,7 @@ class SectionAdminController extends BaseController
             'name' => $name,
             'title' => $title,
             'slug' => $slug,
+            'user_id' => $userId,
         ]);
 
         $this->redirectWithNotice($newId > 0 ? 'Section ajoutee' : 'Creation impossible', null);
@@ -103,7 +111,13 @@ class SectionAdminController extends BaseController
             return;
         }
 
-        $ok = $this->sectionModel->softDelete($id);
+        $userId = $this->getAuthenticatedUserId();
+        if ($userId === null) {
+            $this->redirectWithNotice('Utilisateur non authentifie', null);
+            return;
+        }
+
+        $ok = $this->sectionModel->softDelete($id, $userId);
         $this->redirectWithNotice($ok ? 'Section supprimee' : 'Suppression impossible', null);
     }
 
