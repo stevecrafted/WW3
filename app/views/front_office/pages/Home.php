@@ -21,7 +21,7 @@
     .welcome-card {
         background: var(--beige, #faf9f7);
         border: 2px solid var(--noir, #0d0d0d);
-        border-radius: 18px;
+        /* border-radius: 18px; */
         padding: 24px;
         box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -60,7 +60,7 @@
         text-decoration: none;
         background: #efecd9;
         border: 2px solid var(--noir, #0d0d0d);
-        border-radius: 14px;
+        /* border-radius: 14px; */
         padding: 16px;
         font-family: var(--font-ui, 'DM Sans', Helvetica, sans-serif);
         font-weight: 600;

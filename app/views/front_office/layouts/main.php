@@ -40,13 +40,16 @@
                     <span class="masthead__logo-word">Iran<span>Watch</span></span>
                     <span class="masthead__logo-sub">Géopolitique &amp; Conflits — Moyen-Orient</span>
                 </a>
+                 <a href="/" >
                 <div class="masthead__search" role="search" tabindex="0" aria-label="Rechercher">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        <path d="M3 9.5L12 3l9 6.5" />
+                        <path d="M9 22V12h6v10" />
                     </svg>
-                    Rechercher
+
+                    Retourner à l'accueil
                 </div>
+                </a>
             </div>
         </header>
 
