@@ -1,6 +1,16 @@
--- DROP DATABASE if exists ww3;
--- CREATE DATABASE ww3;
--- USE ww3; 
+DROP DATABASE if exists ww3;
+CREATE DATABASE ww3;
+USE ww3; 
+
+CREATE TABLE user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at DATETIME NULL
+);
 
 -- =========================
 -- TABLE: section
@@ -10,6 +20,13 @@ CREATE TABLE section (
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     title VARCHAR(255) NOT NULL,
+
+    user_id INT NOT NULL,
+
+    CONSTRAINT fk_section_user
+        FOREIGN KEY (user_id)
+        REFERENCES user(id)
+        ON DELETE CASCADE,
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -30,6 +47,13 @@ CREATE TABLE content (
     meta_title VARCHAR(255),    -- 
     slug VARCHAR(255) NOT NULL UNIQUE,
     meta_description TEXT,
+
+    user_id INT NOT NULL,
+
+    CONSTRAINT fk_content_user
+        FOREIGN KEY (user_id)
+        REFERENCES user(id)
+        ON DELETE CASCADE,
 
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -62,15 +86,7 @@ CREATE TABLE image (
         ON DELETE CASCADE
 );
 
-CREATE TABLE user (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_name VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
 
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at DATETIME NULL
-);
 
 INSERT INTO user (user_name, password)
 VALUES ('admin', 'admin');
@@ -78,12 +94,12 @@ VALUES ('admin', 'admin');
 -- =========================
 -- DONNEES MINIMALES
 -- =========================
-INSERT INTO section (name, slug, title)
-VALUES ('Actualite', 'actualite', 'Actualite Guerre en Iran')
+INSERT INTO section (name, slug, title, user_id)
+VALUES ('Actualite', 'actualite', 'Actualite Guerre en Iran', 1)
 ON DUPLICATE KEY UPDATE title = VALUES(title);
 
-INSERT INTO section (name, slug, title)
-VALUES ('Histoire', 'histoire', 'Histoire du conflit')
+INSERT INTO section (name, slug, title, user_id)
+VALUES ('Histoire', 'histoire', 'Histoire du conflit', 1)
 ON DUPLICATE KEY UPDATE title = VALUES(title);
 
 -- -- =========================
