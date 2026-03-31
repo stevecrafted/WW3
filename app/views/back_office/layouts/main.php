@@ -26,8 +26,13 @@
     <a href="/admin" class="bo-masthead__logo" aria-label="IranWatch — Accueil admin">
         Iran<span>Watch</span>
     </a>
-    <nav aria-label="Navigation admin">
+    <nav aria-label="Navigation admin" class="bo-masthead__nav">
         <span class="bo-masthead__badge">Back-office</span>
+        <form method="POST" action="/logout" style="display: inline;">
+            <button type="submit" class="bo-masthead__logout" aria-label="Se déconnecter">
+                Déconnexion
+            </button>
+        </form>
     </nav>
 </header>
 
