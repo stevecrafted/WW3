@@ -93,6 +93,7 @@ $baseController = new app\controllers\BaseController();
 $authController = new app\controllers\AuthController();
 $sectionAdminController = new app\controllers\SectionAdminController();
 $contentAdminController = new app\controllers\ContentAdminController();
+$sectionController = new app\controllers\SectionController();
 
 if ($method === 'GET' && $path === '/') {
   $authController->home();
@@ -200,6 +201,27 @@ if ($method === 'POST' && preg_match('#^/admin/sections/(\d+)/contents/save$#', 
 if ($method === 'POST' && preg_match('#^/admin/sections/(\d+)/contents/(\d+)/delete$#', $path, $matches)) {
   $contentAdminController->delete((int) $matches[1], (int) $matches[2]);
   exit;
+}
+
+// Gere dynamiquement les liens
+$reservedPaths = ['login', 'logout', 'admin', 'api', 'actualite', 'histoire'];
+ 
+if (
+    $method === 'GET'
+    && preg_match('#^/([a-z0-9\-]+)/(\d+)(?:-([^/]+))?$#', $path, $matches)
+    && !in_array($matches[1], $reservedPaths, true)
+) {
+    $sectionController->show($matches[1], (int) $matches[2], $matches[3] ?? null);
+    exit;
+}
+
+if (
+    $method === 'GET'
+    && preg_match('#^/([a-z0-9\-]+)$#', $path, $matches)
+    && !in_array($matches[1], $reservedPaths, true)
+) {
+    $sectionController->index($matches[1]);
+    exit;
 }
 
 $baseController->showNotFound();

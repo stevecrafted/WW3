@@ -74,7 +74,7 @@ class BaseController
         }
 
         http_response_code(404);
-        $this->render('NotFound', [
+        $this->render('Error/NotFound', [
             'title' => '404 - Page introuvable | IranWatch',
             'metaDescription' => 'La page demandee est introuvable.',
             'robots' => 'noindex, follow',
