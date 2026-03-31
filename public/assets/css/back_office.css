@@ -86,6 +86,37 @@ fieldset    { border: none; padding: 0; margin: 0; }
     padding: 3px 10px;
 }
 
+/* Navigation du masthead (côté droit) */
+.bo-masthead__nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bo-masthead__logout {
+    background: var(--rouge);
+    color: var(--blanc);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.bo-masthead__logout:hover {
+    background: var(--rouge-hover);
+    transform: translateY(-1px);
+}
+
+.bo-masthead__logout:active {
+    transform: translateY(0);
+}
+
 /* Navigation secondaire (onglets sous le masthead) */
 .bo-subnav {
     background: var(--blanc);

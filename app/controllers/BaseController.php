@@ -13,6 +13,11 @@ class BaseController
         $this->sections = $sectionModel->getFrontSections();
     }
 
+    protected function getAuthenticatedUserId(): ?int
+    {
+        return isset($_SESSION['auth_user']['id']) ? (int) $_SESSION['auth_user']['id'] : null;
+    }
+
     protected function render(string $viewPath, array $data = []): void
     {
         $this->renderTemplate('front_office', $viewPath, $data);

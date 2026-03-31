@@ -5,17 +5,17 @@ services:
     build: .
     container_name: iranwatch_web
     ports:
-      - "8081:80"  
+      - "8081:80"
     volumes:
-      - .:/var/www/html 
+      - .:/var/www/html
     depends_on:
       db:
         condition: service_healthy
     environment:
       - DB_HOST=db
       - DB_NAME=ww3
-      - DB_USER=user
-      - DB_PASSWORD=steve
+      - DB_USER=ww3
+      - DB_PASSWORD=ww3
 
   db:
     image: mysql:8.0.45
@@ -24,16 +24,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: ww3
-      MYSQL_USER: user
-      MYSQL_PASSWORD: steve
+      MYSQL_USER: ww3
+      MYSQL_PASSWORD: ww3
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./db:/docker-entrypoint-initdb.d   # Exécute tous les fichiers SQL au démarrage
-    command: --default-authentication-plugin=mysql_native_password
+      - ./db:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uww3", "-pww3"]
       interval: 5s
       timeout: 5s
       retries: 10
