@@ -9,6 +9,7 @@ class Contenu
     private PDO $db;
     private FileCache $cache;
     private const LIST_CACHE_TTL = 120;
+    private const FRONT_CACHE_TTL = 120;
 
     public function __construct()
     {
@@ -21,6 +22,11 @@ class Contenu
         $sql = "SELECT * FROM content WHERE ";
         $params = [];
         $whereClauses = [];
+
+        if (!array_key_exists('deleted_at', $conditions)) {
+            $whereClauses[] = 'deleted_at IS NULL';
+        }
+
         foreach ($conditions as $key => $value) {
             if (is_null($value)) {
                 $whereClauses[] = "$key IS NULL";
@@ -44,6 +50,10 @@ class Contenu
         $params = [];
         $whereClauses = [];
 
+        if (!array_key_exists('deleted_at', $conditions)) {
+            $whereClauses[] = 'deleted_at IS NULL';
+        }
+
         if (!empty($conditions)) {
             foreach ($conditions as $key => $value) {
                 if (is_null($value)) {
@@ -53,6 +63,9 @@ class Contenu
                     $params[":$key"] = $value;
                 }
             }
+        }
+
+        if (!empty($whereClauses)) {
             $sql .= " WHERE " . implode(' AND ', $whereClauses);
         }
 
@@ -74,6 +87,10 @@ class Contenu
     {
         $sql = 'SELECT * FROM content WHERE id = :id';
         $params = [':id' => $id];
+
+        if (!$includeDeleted) {
+            $sql .= ' AND deleted_at IS NULL';
+        }
 
         $sql .= ' LIMIT 1';
 
@@ -135,6 +152,33 @@ class Contenu
             'items' => $items,
             'total' => $total,
         ];
+    }
+
+    public function getFrontArticlesBySectionId(int $sectionId): array
+    {
+        $cacheKey = 'front_articles_section_' . $sectionId;
+
+        return $this->cache->remember($cacheKey, self::FRONT_CACHE_TTL, function () use ($sectionId): array {
+            $sql = 'SELECT * FROM content'
+                . ' WHERE section_id = :section_id AND deleted_at IS NULL'
+                . ' ORDER BY created_at DESC, id DESC';
+
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':section_id' => $sectionId]);
+
+            return $stmt->fetchAll();
+        });
+    }
+
+    public function getFrontArticleById(int $id): ?object
+    {
+        $cacheKey = 'front_article_' . $id;
+
+        $article = $this->cache->remember($cacheKey, self::FRONT_CACHE_TTL, function () use ($id) {
+            return $this->findById($id, false);
+        });
+
+        return $article instanceof \stdClass ? $article : ($article ?: null);
     }
 
     public function createContent(int $sectionId, array $payload): int
@@ -253,7 +297,7 @@ class Contenu
 
     private function buildSearchWhereClause(array $filters, array &$params): string
     {
-        $clauses = [];
+        $clauses = ['deleted_at IS NULL'];
 
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ($keyword !== '') {
@@ -285,6 +329,9 @@ class Contenu
     {
         $this->cache->forgetByPrefix('content_list_');
         $this->cache->forgetByPrefix('content_count_');
+        $this->cache->forgetByPrefix('front_article_');
+        $this->cache->forgetByPrefix('front_articles_section_');
+        $this->cache->forgetByPrefix('front_images_content_');
     }
 
 

@@ -24,18 +24,12 @@ class HistoireController extends BaseController
         }
 
         $contenuModel = new Contenu();
-        $articles = $contenuModel->findAll(
-            ['section_id' => $section->id],
-            ['order' => 'created_at DESC']   // On peut trier par date, ou par ordre personnalisé si besoin
-        );
+        $articles = $contenuModel->getFrontArticlesBySectionId((int) $section->id);
 
         // Récupération des images
         $imageModel = new Image();
         foreach ($articles as $article) {
-            $article->images = $imageModel->findAll(
-                ['content_id' => $article->id],
-                ['order' => 'display_order ASC']
-            );
+            $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
             $article->image_principale = $article->images[0] ?? null;
         }
 
@@ -54,7 +48,7 @@ class HistoireController extends BaseController
     public function show(int $id, ?string $slug = null)
     {
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['id' => $id]);
+        $article = $contenuModel->getFrontArticleById($id);
 
         if (!$article) {
             $this->notFound();
@@ -75,10 +69,7 @@ class HistoireController extends BaseController
 
         // Charger les images
         $imageModel = new Image();
-        $article->images = $imageModel->findAll(
-            ['content_id' => $article->id],
-            ['order' => 'display_order ASC']
-        );
+        $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
         $article->image_principale = $article->images[0] ?? null;
 
         // Charger la section

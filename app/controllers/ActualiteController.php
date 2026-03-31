@@ -24,17 +24,11 @@ class ActualiteController extends BaseController
         }
 
         $contenuModel = new Contenu();
-        $articles = $contenuModel->findAll(
-            ['section_id' => $section->id],
-            ['order' => 'created_at DESC']
-        );
+        $articles = $contenuModel->getFrontArticlesBySectionId((int) $section->id);
 
         $imageModel = new Image();
         foreach ($articles as $article) {
-            $article->images = $imageModel->findAll(
-                ['content_id' => $article->id],
-                ['order' => 'display_order ASC']
-            );
+            $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
             $article->image_principale = $article->images[0] ?? null;
         }
 
@@ -49,10 +43,8 @@ class ActualiteController extends BaseController
 
     public function show(int $id, ?string $slug = null): void
     {
-
-        error_log("article");
         $contenuModel = new Contenu();
-        $article = $contenuModel->findOne(['id' => $id]);
+    $article = $contenuModel->getFrontArticleById($id);
 
         if (!$article) {
             $this->notFound();
@@ -72,10 +64,7 @@ class ActualiteController extends BaseController
         }
 
         $imageModel = new Image();
-        $article->images = $imageModel->findAll(
-            ['content_id' => $article->id],
-            ['order' => 'display_order ASC']
-        );
+        $article->images = $imageModel->getFrontImagesByContentId((int) $article->id);
         $article->image_principale = $article->images[0] ?? null;
 
         $article->section = $sectionModel->findOne(['id' => $article->section_id]);

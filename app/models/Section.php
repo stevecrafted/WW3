@@ -9,6 +9,7 @@ class Section
     private PDO $db;
     private FileCache $cache;
     private const LIST_CACHE_TTL = 120;
+    private const FRONT_CACHE_TTL = 120;
 
     public function __construct()
     {
@@ -21,6 +22,11 @@ class Section
         $sql = "SELECT * FROM section WHERE ";
         $params = [];
         $whereClauses = [];
+
+        if (!array_key_exists('deleted_at', $conditions)) {
+            $whereClauses[] = 'deleted_at IS NULL';
+        }
+
         foreach ($conditions as $key => $value) {
             if (is_null($value)) {
                 $whereClauses[] = "$key IS NULL";
@@ -43,6 +49,11 @@ class Section
         $sql = "SELECT * FROM section";
         $params = [];
         $whereClauses = [];
+
+        if (!array_key_exists('deleted_at', $conditions)) {
+            $whereClauses[] = 'deleted_at IS NULL';
+        }
+
         if (!empty($conditions)) {
             foreach ($conditions as $key => $value) {
                 if (is_null($value)) {
@@ -52,8 +63,12 @@ class Section
                     $params[":$key"] = $value;
                 }
             }
+        }
+
+        if (!empty($whereClauses)) {
             $sql .= " WHERE " . implode(' AND ', $whereClauses);
         }
+
         if (!empty($options['order'])) {
             $sql .= " ORDER BY " . $options['order'];
         }
@@ -73,7 +88,10 @@ class Section
     {
         $sql = 'SELECT * FROM section WHERE id = :id';
         $params = [':id' => $id];
- 
+
+        if (!$includeDeleted) {
+            $sql .= ' AND deleted_at IS NULL';
+        }
 
         $sql .= ' LIMIT 1';
 
@@ -134,6 +152,13 @@ class Section
             'items' => $items,
             'total' => $total,
         ];
+    }
+
+    public function getFrontSections(): array
+    {
+        return $this->cache->remember('front_sections_nav', self::FRONT_CACHE_TTL, function (): array {
+            return $this->findAll([], ['order' => 'updated_at DESC, id DESC']);
+        });
     }
 
     public function createSection(array $payload): int
@@ -240,7 +265,7 @@ class Section
 
     private function buildSearchWhereClause(array $filters, array &$params): string
     {
-        $clauses = [];
+        $clauses = ['deleted_at IS NULL'];
 
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ($keyword !== '') {
@@ -278,5 +303,6 @@ class Section
     {
         $this->cache->forgetByPrefix('section_list_');
         $this->cache->forgetByPrefix('section_count_');
+        $this->cache->forgetByPrefix('front_sections_');
     }
 }

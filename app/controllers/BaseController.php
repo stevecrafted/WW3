@@ -10,7 +10,7 @@ class BaseController
     public function __construct()
     {
         $sectionModel = new Section();
-        $this->sections = $sectionModel->findAll();
+        $this->sections = $sectionModel->getFrontSections();
     }
 
     protected function render(string $viewPath, array $data = []): void
