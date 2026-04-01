@@ -8,14 +8,14 @@ Built with pure PHP (no framework) following MVC architecture, it focuses on cle
 
 ---
 
-## Screenshots
+## screenshots
 
 | **Front Office** | **Back Office** |
 |------------------|-----------------|
-| ![Welcome](screenshots/front_welcome.jpg) | ![Content list](screenshots/Backoffice_liste.jpg) |
-| ![Article list](screenshots/front_scroll.jpg) | ![Create form](screenshots/create_content_Un.jpg) |
-| ![Article detail](screenshots/front_show.jpg) | ![Edit form](screenshots/modif_content_Un.jpg) |
-| ![History page](screenshots/Histoire.jpg) | *(more screenshots available in the `screenshots/` folder)* |
+| ![Welcome](screenshoot/front_welcome.jpg) | ![Content list](screenshoot/Backoffice_liste.jpg) |
+| ![Article list](screenshoot/front_scroll.jpg) | ![Create form](screenshoot/create_content_Un.jpg) |
+| ![Article detail](screenshoot/front_show.jpg) | ![Edit form](screenshoot/modif_content_Un.jpg) |
+| ![History page](screenshoot/Histoire.jpg) | *(more screenshoot available in the `screenshoot/` folder)* |
 
 
 ## Key Features
