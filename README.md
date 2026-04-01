@@ -29,6 +29,9 @@ Built with pure PHP (no framework) following MVC architecture, it focuses on cle
 
 ---
 
+## Additional Features
+- **Real time news** - Add real time news using google map and fresh news on the net
+
 ## Tech Stack
 
 - PHP 8.2 + PDO
