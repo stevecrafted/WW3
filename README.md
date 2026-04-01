@@ -1,5 +1,4 @@
 
-```markdown
 # IranWatch
 
 **IranWatch** is a web platform delivering news and historical analysis of the Iran‑USA‑Israel conflict.  
@@ -18,7 +17,6 @@ Built with pure PHP (no framework) following MVC architecture, it focuses on cle
 | ![Article detail](screenshots/front_show.jpg) | ![Edit form](screenshots/modif_content_Un.jpg) |
 | ![History page](screenshots/Histoire.jpg) | *(more screenshots available in the `screenshots/` folder)* |
 
----
 
 ## Key Features
 
@@ -72,6 +70,4 @@ Built with pure PHP (no framework) following MVC architecture, it focuses on cle
 ## License
 
 This project is open‑source under the **MIT License**. See [LICENSE](LICENSE) for details.
- 
-```
  
